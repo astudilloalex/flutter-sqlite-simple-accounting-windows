@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:simple_accounting_offline/app/services/get_it_service.dart';
+import 'package:simple_accounting_offline/src/user/application/user_service.dart';
 import 'package:simple_accounting_offline/ui/pages/home/cubit/home_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/home/home_page.dart';
 import 'package:simple_accounting_offline/ui/pages/sign_in/cubit/sign_in_cubit.dart';
@@ -29,7 +31,7 @@ class RoutePage {
         path: RouteName.splash,
         builder: (context, state) {
           return BlocProvider(
-            create: (context) => SplashCubit(),
+            create: (context) => SplashCubit(getIt<UserService>()),
             child: const SplashPage(),
           );
         },
