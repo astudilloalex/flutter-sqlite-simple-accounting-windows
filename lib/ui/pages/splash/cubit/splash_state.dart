@@ -4,4 +4,12 @@ class SplashState {
   });
 
   final bool loading;
+
+  SplashState copyWith({
+    bool? loading,
+  }) {
+    return SplashState(
+      loading: loading ?? this.loading,
+    );
+  }
 }

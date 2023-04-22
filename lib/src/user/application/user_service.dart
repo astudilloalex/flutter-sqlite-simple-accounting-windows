@@ -20,11 +20,12 @@ class UserService {
     );
   }
 
-  /* Future<User?> verifySession(String payload) {
+  Future<User?> verifySession(String payload) {
     final Map<String, Object?> data =
         json.decode(payload) as Map<String, Object?>;
-    DateTime.tryParse(data['expiration']);
-  } */
+    final DateTime? date = DateTime.tryParse(data['expiration']! as String);
+    return _repository.findByUsername(data['username']! as String);
+  }
 
   Future<String> signIn(String username, String password) async {
     final User? user = await _repository.findByUsername(username);
