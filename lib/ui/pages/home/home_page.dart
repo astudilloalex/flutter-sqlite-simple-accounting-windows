@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:simple_accounting_offline/ui/pages/account/account_page.dart';
+import 'package:simple_accounting_offline/ui/pages/account/cubit/account_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/home/cubit/home_cubit.dart';
 
 class HomePage extends StatelessWidget {
@@ -8,6 +10,12 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> widgets = <Widget>[
+      BlocProvider(
+        create: (context) => AccountCubit(),
+        child: const AccountPage(),
+      ),
+    ];
     return Scaffold(
       body: Row(
         children: [
@@ -56,7 +64,9 @@ class HomePage extends StatelessWidget {
             minExtendedWidth: 200.0,
           ),
           const VerticalDivider(thickness: 1, width: 1),
-          Expanded(child: Container()),
+          Expanded(
+            child: widgets[context.watch<HomeCubit>().state.currentIndex],
+          ),
         ],
       ),
     );
