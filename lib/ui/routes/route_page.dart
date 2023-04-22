@@ -35,8 +35,8 @@ class RoutePage {
         },
       ),
       GoRoute(
-        name: RouteName.splash,
-        path: RouteName.splash,
+        name: RouteName.signIn,
+        path: RouteName.signIn,
         builder: (context, state) {
           return BlocProvider(
             create: (context) => SignInCubit(),
