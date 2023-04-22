@@ -1,0 +1,3 @@
+class DetailState {
+  const DetailState();
+}

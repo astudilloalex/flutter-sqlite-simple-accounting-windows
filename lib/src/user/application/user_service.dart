@@ -20,14 +20,17 @@ class UserService {
     );
   }
 
-  /* Future<User?> verifySession(String payload) {
+  Future<User?> verifySession(String payload) async {
     final Map<String, Object?> data =
         json.decode(payload) as Map<String, Object?>;
-    DateTime.tryParse(data['expiration']);
-  } */
+    final DateTime? date = DateTime.tryParse(data['expiration']! as String);
+    if (date == null) return null;
+    if (date.isBefore(DateTime.now())) return null;
+    return _repository.findByUsername(data['username']! as String);
+  }
 
   Future<String> signIn(String username, String password) async {
-    final User? user = await _repository.findByUsername(username);
+    final User? user = await _repository.findByUsername(username.trim());
     if (user == null) throw const BadCredentialException('user-not-found');
     if (!user.active) throw const AccountException('user-disabled');
     if (!BCrypt.checkpw(password, user.password)) {
@@ -37,7 +40,8 @@ class UserService {
     final Map<String, Object?> payload = {
       'userId': user.id,
       'username': user.username,
-      'expiration': DateTime.now().add(const Duration(hours: 15)),
+      'expiration':
+          DateTime.now().add(const Duration(hours: 15)).toIso8601String(),
       'issuer': 'https://www.alexastudillo.com/',
     };
     return json.encode(payload);

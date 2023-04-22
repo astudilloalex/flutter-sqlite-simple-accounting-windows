@@ -43,13 +43,13 @@ class User {
 
   factory User.fromJson(Map<String, Object?> json) {
     return User(
-      active: json['active']! as bool,
+      active: json['active'] == 1,
       code: json['code']! as String,
-      creationDate: json['creation_date']! as DateTime,
+      creationDate: DateTime.parse(json['creation_date'].toString()),
       id: json['id']! as int,
       password: json['password']! as String,
       roleId: json['role_id']! as int,
-      updateDate: json['update_date']! as DateTime,
+      updateDate: DateTime.parse(json['update_date'].toString()),
       username: json['username']! as String,
     );
   }

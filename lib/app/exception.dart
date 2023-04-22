@@ -1,12 +1,12 @@
 abstract class UnauthorizedException implements Exception {
-  const UnauthorizedException([this.message]);
-  final String? message;
+  const UnauthorizedException([this.code]);
+  final String? code;
 }
 
 class BadCredentialException extends UnauthorizedException {
-  const BadCredentialException([super.message]);
+  const BadCredentialException([super.code]);
 }
 
 class AccountException extends UnauthorizedException {
-  const AccountException([super.message]);
+  const AccountException([super.code]);
 }
