@@ -4,7 +4,7 @@ import 'package:bcrypt/bcrypt.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-class SQLiteService {
+class SQLite {
   static Database? _database;
 
   Future<Database> get database async {
