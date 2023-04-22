@@ -38,9 +38,9 @@ class _SplashPageState extends State<SplashPage> {
     final bool isLogged = await context.read<SplashCubit>().authenticated();
     if (context.mounted) {
       if (isLogged) {
-        context.go(RouteName.home);
+        context.goNamed(RouteName.home);
       } else {
-        context.go(RouteName.signIn);
+        context.goNamed(RouteName.signIn);
       }
     }
   }

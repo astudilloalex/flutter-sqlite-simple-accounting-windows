@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:bcrypt/bcrypt.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -10,8 +13,9 @@ class SQLite {
   static Database? _database;
 
   Future<Database> get database async {
+    final Directory app = await getApplicationDocumentsDirectory();
     return _database ??= await databaseFactoryFfi.openDatabase(
-      'path',
+      join(app.path, 'SimpleAccounting', 'Data', 'simpleaccounting.db'),
       options: OpenDatabaseOptions(
         version: 1,
         onCreate: _onCreate,
@@ -22,8 +26,11 @@ class SQLite {
 
   // On create database insert and create default tables.
   Future<void> _onCreate(Database database, int version) async {
-    await database.execute(_createSQLV1);
     final Batch batch = database.batch();
+    // _createSQLV1.split(';').forEach((element) {
+    //   batch.execute(element);
+    // });
+    batch.execute(_createSQLV1);
     // Insert roles.
     batch.insert(
       'roles',
@@ -32,8 +39,8 @@ class SQLite {
         'code': 'ADM',
         'name': 'ADMINISTRADOR',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     batch.insert(
@@ -43,8 +50,8 @@ class SQLite {
         'code': 'REP',
         'name': 'REPORT',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     batch.insert(
@@ -54,8 +61,8 @@ class SQLite {
         'code': 'TYP',
         'name': 'TYPER',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     // Insert users.
@@ -67,8 +74,8 @@ class SQLite {
         'username': 'admin',
         'password': BCrypt.hashpw('admin1234', BCrypt.gensalt()),
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     // Insert account types.
@@ -79,8 +86,8 @@ class SQLite {
         'code': generateSQLiteCode(),
         'name': 'AGRUPADORA',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     batch.insert(
@@ -90,8 +97,8 @@ class SQLite {
         'code': generateSQLiteCode(),
         'name': 'MOVIMIENTO',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     // Insert categories
@@ -102,8 +109,8 @@ class SQLite {
         'code': generateSQLiteCode(),
         'name': 'ACTIVOS',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     batch.insert(
@@ -113,8 +120,8 @@ class SQLite {
         'code': generateSQLiteCode(),
         'name': 'PASIVOS',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     batch.insert(
@@ -124,8 +131,8 @@ class SQLite {
         'code': generateSQLiteCode(),
         'name': 'PATRIMONIO',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     batch.insert(
@@ -135,8 +142,8 @@ class SQLite {
         'code': generateSQLiteCode(),
         'name': 'INGRESOS',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     batch.insert(
@@ -146,8 +153,8 @@ class SQLite {
         'code': generateSQLiteCode(),
         'name': 'GASTOS',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     batch.insert(
@@ -157,8 +164,8 @@ class SQLite {
         'code': generateSQLiteCode(),
         'name': 'OTRO RESULTADO INTEGRAL',
         'active': true,
-        'creation_date': DateTime.now(),
-        'update_date': DateTime.now(),
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
       },
     );
     await batch.commit();
@@ -250,7 +257,7 @@ CREATE TABLE seats(
   description VARCHAR(500),
   canceled BOOLEAN NOT NULL,
   FOREIGN KEY (period_id) REFERENCES periods(id),
-  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE seat_details(

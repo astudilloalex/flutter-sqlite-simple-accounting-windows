@@ -45,7 +45,10 @@ class RoutePage {
         path: RouteName.signIn,
         builder: (context, state) {
           return BlocProvider(
-            create: (context) => SignInCubit(),
+            create: (context) => SignInCubit(
+              getIt<UserService>(),
+              getIt<GetStorageService>(),
+            ),
             child: const SignInPage(),
           );
         },

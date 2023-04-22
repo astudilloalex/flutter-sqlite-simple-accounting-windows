@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:simple_accounting_offline/app/services/get_it_service.dart';
 import 'package:simple_accounting_offline/ui/routes/route_page.dart';
+import 'package:simple_accounting_offline/ui/theme/app_theme_data.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 Future<void> main() async {
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       routerConfig: RoutePage.router,
       supportedLocales: AppLocalizations.supportedLocales,
+      theme: AppThemeData.light,
     );
   }
 }
