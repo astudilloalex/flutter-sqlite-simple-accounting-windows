@@ -3,7 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:simple_accounting_offline/ui/pages/account/account_page.dart';
 import 'package:simple_accounting_offline/ui/pages/account/cubit/account_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/dashboard/cubit/dashboard_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/dashboard/dashboard_page.dart';
+import 'package:simple_accounting_offline/ui/pages/detail/cubit/detail_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/detail/detail_page.dart';
 import 'package:simple_accounting_offline/ui/pages/home/cubit/home_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/report/cubit/report_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/report/report_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -12,8 +18,20 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> widgets = <Widget>[
       BlocProvider(
+        create: (context) => DashboardCubit(),
+        child: const DashboardPage(),
+      ),
+      BlocProvider(
+        create: (context) => DetailCubit(),
+        child: const DetailPage(),
+      ),
+      BlocProvider(
         create: (context) => AccountCubit(),
         child: const AccountPage(),
+      ),
+      BlocProvider(
+        create: (context) => ReportCubit(),
+        child: const ReportPage(),
       ),
     ];
     return Scaffold(
