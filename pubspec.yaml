@@ -28,11 +28,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  bcrypt: ^1.1.3
   fluent_ui: ^4.5.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
   go_router: ^6.5.7
+  sqflite_common: ^2.4.4
   sqflite_common_ffi: ^2.2.4
 
 

@@ -1,6 +1,12 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-void main() {
+import 'package:flutter/material.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+Future<void> main() async {
+  if (Platform.isWindows || Platform.isLinux) {
+    sqfliteFfiInit();
+  }
   runApp(const MyApp());
 }
 
