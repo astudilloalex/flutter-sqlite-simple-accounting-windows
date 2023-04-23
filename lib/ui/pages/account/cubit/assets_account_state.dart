@@ -1,21 +1,20 @@
 import 'package:simple_accounting_offline/src/account/domain/account.dart';
 
-class AccountState {
-  const AccountState({
-    this.currentTab = 0,
+class AssetsAccountState {
+  const AssetsAccountState({
+    this.accounts = const [],
     this.loading = false,
   });
 
-  final int currentTab;
+  final List<Account> accounts;
   final bool loading;
 
-  AccountState copyWith({
+  AssetsAccountState copyWith({
     List<Account>? accounts,
-    int? currentTab,
     bool? loading,
   }) {
-    return AccountState(
-      currentTab: currentTab ?? this.currentTab,
+    return AssetsAccountState(
+      accounts: accounts ?? this.accounts,
       loading: loading ?? this.loading,
     );
   }

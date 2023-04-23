@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:simple_accounting_offline/app/services/get_it_service.dart';
+import 'package:simple_accounting_offline/src/account/application/account_service.dart';
 import 'package:simple_accounting_offline/ui/pages/account/account_page.dart';
 import 'package:simple_accounting_offline/ui/pages/account/cubit/account_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/account/cubit/assets_account_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/dashboard/cubit/dashboard_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/dashboard/dashboard_page.dart';
 import 'package:simple_accounting_offline/ui/pages/detail/cubit/detail_cubit.dart';
@@ -26,8 +29,16 @@ class HomePage extends StatelessWidget {
         create: (context) => DetailCubit(),
         child: const DetailPage(),
       ),
-      BlocProvider(
-        create: (context) => AccountCubit(),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+                AssetsAccountCubit(getIt<AccountService>())..load(),
+          ),
+          BlocProvider(
+            create: (context) => AccountCubit(getIt<AccountService>()),
+          ),
+        ],
         child: const AccountPage(),
       ),
       BlocProvider(
@@ -36,6 +47,7 @@ class HomePage extends StatelessWidget {
       ),
     ];
     return Scaffold(
+      appBar: AppBar(),
       body: Row(
         children: [
           NavigationRail(
