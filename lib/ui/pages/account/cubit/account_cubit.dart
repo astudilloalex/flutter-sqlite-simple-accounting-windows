@@ -28,7 +28,13 @@ class AccountCubit extends Cubit<AccountState> {
       emit(state.copyWith(loading: true));
       accounts.addAll(await _service.getChildrenByCategory(categoryId));
     } finally {
-      emit(state.copyWith(loading: false, accounts: accounts));
+      emit(
+        state.copyWith(
+          loading: false,
+          accounts: accounts,
+          currentTab: categoryId - 1,
+        ),
+      );
     }
   }
 

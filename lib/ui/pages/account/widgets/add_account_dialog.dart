@@ -105,9 +105,10 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
                         },
                       ),
                       const SizedBox(height: 16.0),
-                      // Account Category
+                      // Parent account
                       DropdownButtonFormField<int?>(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
+                        isExpanded: true,
                         value: selectedAccountParentId,
                         items: parentAccounts.map((type) {
                           return DropdownMenuItem<int?>(
