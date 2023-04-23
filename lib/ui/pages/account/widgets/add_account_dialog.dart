@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:simple_accounting_offline/app/services/get_it_service.dart';
+import 'package:simple_accounting_offline/src/account_category/application/account_category_service.dart';
+import 'package:simple_accounting_offline/src/account_category/domain/account_category.dart';
+import 'package:simple_accounting_offline/src/account_type/application/account_type_service.dart';
+import 'package:simple_accounting_offline/src/account_type/domain/account_type.dart';
 
 class AddAccountDialog extends StatefulWidget {
   const AddAccountDialog({super.key});
@@ -15,12 +20,34 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
   final TextEditingController nameController = TextEditingController();
 
   bool rootAccount = false;
+  bool loading = true;
+
+  final List<AccountType> accountTypes = [];
+  final List<AccountCategory> accountCategories = [];
+  int? selectedAccountTypeId;
+  int? selectedAccountCategoryId;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
 
   @override
   void dispose() {
     codeController.dispose();
     nameController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      accountTypes.addAll(await getIt<AccountTypeService>().getAll());
+      accountCategories.addAll(await getIt<AccountCategoryService>().getAll());
+    } finally {
+      loading = false;
+      setState(() {});
+    }
   }
 
   @override
@@ -50,14 +77,73 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
                   onChanged: (value) {
                     setState(() {
                       rootAccount = value ?? false;
+                      selectedAccountTypeId = null;
                     });
                   },
                   controlAffinity: ListTileControlAffinity.leading,
                   title: Text(AppLocalizations.of(context)!.rootAccount),
                 ),
                 const SizedBox(height: 16.0),
+                // Account type
+                DropdownButtonFormField<int?>(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  value: selectedAccountTypeId,
+                  items: rootAccount
+                      ? accountTypes
+                          .where((element) => element.id == 1)
+                          .map((type) {
+                          return DropdownMenuItem<int?>(
+                            value: type.id,
+                            child: Text(type.name),
+                          );
+                        }).toList()
+                      : accountTypes.map((type) {
+                          return DropdownMenuItem<int?>(
+                            value: type.id,
+                            child: Text(type.name),
+                          );
+                        }).toList(),
+                  decoration: InputDecoration(
+                    labelText: loading
+                        ? AppLocalizations.of(context)!.loading
+                        : AppLocalizations.of(context)!.accountType,
+                    hintText: AppLocalizations.of(context)!.select,
+                  ),
+                  focusColor: Colors.transparent,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedAccountTypeId = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                // Account Category
+                DropdownButtonFormField<int?>(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  value: selectedAccountCategoryId,
+                  items: accountCategories.map((type) {
+                    return DropdownMenuItem<int?>(
+                      value: type.id,
+                      child: Text(type.name),
+                    );
+                  }).toList(),
+                  decoration: InputDecoration(
+                    labelText: loading
+                        ? AppLocalizations.of(context)!.loading
+                        : AppLocalizations.of(context)!.accountCategory,
+                    hintText: AppLocalizations.of(context)!.select,
+                  ),
+                  focusColor: Colors.transparent,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedAccountCategoryId = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16.0),
                 // Code input
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: codeController,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.code,
@@ -66,6 +152,7 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
                 const SizedBox(height: 16.0),
                 // Name input
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: nameController,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.name,

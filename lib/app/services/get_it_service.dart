@@ -20,17 +20,14 @@ void setUpGetIt() {
   getIt.registerSingleton<SQLite>(const SQLite());
 
   // Define repositories.
-  getIt.registerLazySingleton<IUserRepository>(
-    () => UserSQLiteRepository(getIt<SQLite>()),
-  );
-  getIt.registerLazySingleton<IAccountTypeRepository>(
-    () => AccountTypeSQLiteRepository(getIt<SQLite>()),
-  );
-  getIt.registerLazySingleton<IAccountTypeRepository>(
-    () => AccountTypeSQLiteRepository(getIt<SQLite>()),
-  );
   getIt.registerLazySingleton<IAccountCategoryRepository>(
     () => AccountCategorySQLiteRepository(getIt<SQLite>()),
+  );
+  getIt.registerLazySingleton<IAccountTypeRepository>(
+    () => AccountTypeSQLiteRepository(getIt<SQLite>()),
+  );
+  getIt.registerLazySingleton<IUserRepository>(
+    () => UserSQLiteRepository(getIt<SQLite>()),
   );
 
   // Define custom services.
@@ -39,13 +36,13 @@ void setUpGetIt() {
   );
 
   // Define services
-  getIt.registerFactory<UserService>(
-    () => UserService(getIt<IUserRepository>()),
+  getIt.registerFactory<AccountCategoryService>(
+    () => AccountCategoryService(getIt<IAccountCategoryRepository>()),
   );
   getIt.registerFactory<AccountTypeService>(
     () => AccountTypeService(getIt<IAccountTypeRepository>()),
   );
-  getIt.registerFactory<AccountCategoryService>(
-    () => AccountCategoryService(getIt<IAccountCategoryRepository>()),
+  getIt.registerFactory<UserService>(
+    () => UserService(getIt<IUserRepository>()),
   );
 }

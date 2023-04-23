@@ -1,6 +1,7 @@
-{
-    "accountType": "Tipo de cuenta",
+{    
+    "accountCategory": "Categoría de la cuenta",
     "accounts": "Cuentas",
+    "accountType": "Tipo de cuenta",
     "accountWithSameCodeExists": "Ya existe una cuenta con el mismo código",
     "active": "Activo/a",
     "add": "Añadir",
@@ -23,6 +24,7 @@
     "incomes": "Ingresos",
     "invalidValue": "Valor no válido",
     "liabilities": "Pasivos",
+    "loading": "Cargando",
     "logout": "Cerrar sesión",
     "movementType": "Tipo de movimiento",
     "name": "Nombre",
@@ -37,6 +39,7 @@
     "save": "Guardar",
     "search": "Buscar", 
     "searchAccounts": "Buscar cuentas",  
+    "select": "Selecciona",
     "selectAnAccount": "Selecciona una cuenta",
     "signIn": "Iniciar sesión",
     "total": "Total",
