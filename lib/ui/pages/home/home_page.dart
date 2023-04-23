@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Available widgets for rail.
     final List<Widget> widgets = <Widget>[
       BlocProvider(
         create: (context) => DashboardCubit(),
