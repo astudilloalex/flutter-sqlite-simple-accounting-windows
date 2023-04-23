@@ -67,8 +67,14 @@ class AccountSQLiteRepository implements IAccountRepository {
   }
 
   @override
-  Future<Account> update(Account entity) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<Account> update(Account entity) async {
+    final Database db = await _context.database;
+    await db.update(
+      'accounts',
+      entity.toSQLite(),
+      where: 'id = ?',
+      whereArgs: [entity.id],
+    );
+    return entity;
   }
 }

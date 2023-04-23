@@ -9,12 +9,33 @@ class AccountCubit extends Cubit<AccountState> {
   final AccountService _service;
 
   void onChangeTab(int index) {
-    emit(state.copyWith(currentTab: index));
+    loadAccounts(index + 1);
   }
 
   Future<String?> saveAccount(Account entity) async {
     try {
       await _service.add(entity);
+      await loadAccounts(entity.accountCategoryId);
+    } on Exception catch (e) {
+      return e.toString();
+    }
+    return null;
+  }
+
+  Future<void> loadAccounts(int categoryId) async {
+    final List<Account> accounts = [];
+    try {
+      emit(state.copyWith(loading: true));
+      accounts.addAll(await _service.getChildrenByCategory(categoryId));
+    } finally {
+      emit(state.copyWith(loading: false, accounts: accounts));
+    }
+  }
+
+  Future<String?> updateAccount(Account entity) async {
+    try {
+      await _service.update(entity);
+      await loadAccounts(entity.accountCategoryId);
     } on Exception catch (e) {
       return e.toString();
     }

@@ -4,9 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:simple_accounting_offline/app/app.dart';
 import 'package:simple_accounting_offline/src/account/domain/account.dart';
 import 'package:simple_accounting_offline/ui/pages/account/cubit/account_cubit.dart';
-import 'package:simple_accounting_offline/ui/pages/account/cubit/assets_account_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/account/widgets/account_list.dart';
 import 'package:simple_accounting_offline/ui/pages/account/widgets/add_account_dialog.dart';
-import 'package:simple_accounting_offline/ui/pages/account/widgets/assets_tab_container.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -48,15 +47,15 @@ class AccountPage extends StatelessWidget {
             ),
           ],
         ),
-        body: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
+        body: const TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           children: [
-            const AssetsTabContainer(),
-            Icon(Icons.abc_outlined),
-            Icon(Icons.abc_outlined),
-            Icon(Icons.abc_outlined),
-            Icon(Icons.abc_outlined),
-            Icon(Icons.abc_outlined),
+            AccountList(),
+            AccountList(),
+            AccountList(),
+            AccountList(),
+            AccountList(),
+            AccountList(),
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(
@@ -85,12 +84,6 @@ class AccountPage extends StatelessWidget {
     if (context.mounted) {
       if (error != null) {
         showErrorSnackbar(context, error);
-      } else {
-        switch (context.read<AccountCubit>().state.currentTab) {
-          case 0:
-            context.read<AssetsAccountCubit>().load();
-            break;
-        }
       }
     }
   }

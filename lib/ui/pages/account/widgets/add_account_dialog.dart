@@ -10,9 +10,11 @@ import 'package:simple_accounting_offline/src/account_type/domain/account_type.d
 class AddAccountDialog extends StatefulWidget {
   const AddAccountDialog({
     super.key,
+    this.account,
     required this.categoryId,
   });
 
+  final Account? account;
   final int categoryId;
 
   @override
@@ -26,6 +28,7 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
 
   bool loading = true;
   String? codeErrorMessage;
+  bool active = true;
 
   final List<AccountType> accountTypes = [];
   final List<Account> parentAccounts = [];
@@ -164,6 +167,23 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
                         },
                       ),
                       const SizedBox(height: 16.0),
+                      if (widget.account != null &&
+                          widget.account!.accountTypeId == 2)
+                        CheckboxListTile(
+                          value: active,
+                          title: Text(
+                            active
+                                ? AppLocalizations.of(context)!.active
+                                : AppLocalizations.of(context)!.inactive,
+                          ),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          onChanged: (value) {
+                            setState(() => active = value ?? false);
+                          },
+                        ),
+                      if (widget.account != null &&
+                          widget.account!.accountTypeId == 2)
+                        const SizedBox(height: 16.0),
                       // Action buttons
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -201,6 +221,14 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
           widget.categoryId,
         ),
       );
+      final Account? account = widget.account;
+      if (account != null) {
+        codeController.text = account.code;
+        nameController.text = account.name;
+        selectedAccountParentId = account.parentId;
+        selectedAccountTypeId = account.accountTypeId;
+        active = account.active;
+      }
     } finally {
       loading = false;
       setState(() {});
@@ -222,7 +250,7 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
     final Account? account = await getIt<AccountService>().getByCode(
       codeController.text,
     );
-    if (account != null) {
+    if (account != null && account.code != widget.account?.code) {
       setState(() {
         codeErrorMessage = AppLocalizations.of(context)!.codeAlreadyExists;
       });
@@ -235,11 +263,13 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
       context.pop(
         Account(
           accountCategoryId: widget.categoryId,
-          parentId: selectedAccountParentId,
           accountTypeId: selectedAccountTypeId ?? 0,
+          active: active,
           code: codeController.text,
           creationDate: DateTime.now(),
+          id: widget.account?.id,
           name: nameController.text,
+          parentId: selectedAccountParentId,
           updateDate: DateTime.now(),
           userId: 0,
         ),

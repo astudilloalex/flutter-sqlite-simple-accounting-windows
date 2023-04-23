@@ -30,4 +30,15 @@ class AccountService {
       ),
     );
   }
+
+  Future<Account?> update(Account account) {
+    return _repository.update(
+      account.copyWith(
+        code: account.code.trim().toUpperCase(),
+        name: account.name.trim().toUpperCase(),
+        description: account.description?.trim().toUpperCase(),
+        userId: _storageService.currentUserId,
+      ),
+    );
+  }
 }
