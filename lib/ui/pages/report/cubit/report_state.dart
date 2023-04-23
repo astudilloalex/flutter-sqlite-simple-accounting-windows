@@ -1,0 +1,3 @@
+class ReportState {
+  const ReportState();
+}

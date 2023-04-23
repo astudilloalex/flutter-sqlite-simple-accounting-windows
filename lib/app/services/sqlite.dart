@@ -168,6 +168,91 @@ class SQLite {
         'update_date': DateTime.now().toIso8601String(),
       },
     );
+    // Insert primary accounts.
+    batch.insert(
+      'accounts',
+      <String, Object?>{
+        'id': 1,
+        'account_type_id': 1,
+        'account_category_id': 1,
+        'code': '1',
+        'name': 'ACTIVOS',
+        'active': true,
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
+        'user_id': 1,
+      },
+    );
+    batch.insert(
+      'accounts',
+      <String, Object?>{
+        'id': 2,
+        'account_type_id': 1,
+        'account_category_id': 2,
+        'code': '2',
+        'name': 'PASIVOS',
+        'active': true,
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
+        'user_id': 1,
+      },
+    );
+    batch.insert(
+      'accounts',
+      <String, Object?>{
+        'id': 3,
+        'account_type_id': 1,
+        'account_category_id': 3,
+        'code': '3',
+        'name': 'PATRIMONIO',
+        'active': true,
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
+        'user_id': 1,
+      },
+    );
+    batch.insert(
+      'accounts',
+      <String, Object?>{
+        'id': 4,
+        'account_type_id': 1,
+        'account_category_id': 4,
+        'code': '4',
+        'name': 'INGRESOS',
+        'active': true,
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
+        'user_id': 1,
+      },
+    );
+    batch.insert(
+      'accounts',
+      <String, Object?>{
+        'id': 5,
+        'account_type_id': 1,
+        'account_category_id': 5,
+        'code': '5',
+        'name': 'GASTOS',
+        'active': true,
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
+        'user_id': 1,
+      },
+    );
+    batch.insert(
+      'accounts',
+      <String, Object?>{
+        'id': 6,
+        'account_type_id': 1,
+        'account_category_id': 6,
+        'code': '6',
+        'name': 'OTRO RESULTADO INTEGRAL',
+        'active': true,
+        'creation_date': DateTime.now().toIso8601String(),
+        'update_date': DateTime.now().toIso8601String(),
+        'user_id': 1,
+      },
+    );
     await batch.commit();
   }
 
