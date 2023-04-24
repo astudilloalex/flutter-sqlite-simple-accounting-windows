@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_accounting_offline/app/exception.dart';
 import 'package:simple_accounting_offline/app/services/get_storage_service.dart';
@@ -29,6 +31,12 @@ class SignInCubit extends Cubit<SignInState> {
       emit(state.copyWith(loading: true));
       final String payload = await _service.signIn(username, password);
       if (state.remember) {
+        await _storageService.savePayloadSession(payload);
+      } else {
+        final Map<String, Object?> data =
+            json.decode(payload) as Map<String, Object?>;
+        data.remove('expiration');
+        data.addAll({'expiration': DateTime.now().toIso8601String()});
         await _storageService.savePayloadSession(payload);
       }
     } on UnauthorizedException catch (e) {
