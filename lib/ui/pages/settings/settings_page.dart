@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:simple_accounting_offline/app/app.dart';
 import 'package:simple_accounting_offline/src/accounting_period/domain/accounting_period.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/cubit/settings_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/widgets/add_edit_period_dialog.dart';
@@ -51,6 +52,11 @@ class SettingsPage extends StatelessWidget {
     showDialog<AccountingPeriod?>(
       context: context,
       builder: (context) => const AddEditPeriodDialog(),
-    );
+    ).then((value) async {
+      if (value == null) return;
+      final String? error =
+          await context.read<SettingsCubit>().addPeriod(value);
+      if (error != null && context.mounted) showErrorSnackbar(context, error);
+    });
   }
 }

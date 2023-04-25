@@ -19,6 +19,19 @@ class AccountingPeriodSQLiteRepository implements IAccountingPeriodRepository {
   }
 
   @override
+  Future<AccountingPeriod?> findPeriodByYear(DateTime year) async {
+    final Database db = await _context.database;
+    final List<Map<String, Object?>> data = await db.query(
+      'periods',
+      where: "strftime('%Y', start_date) = ? OR strftime('%Y', end_date) = ?",
+      whereArgs: [year.year.toString(), year.year.toString()],
+      orderBy: 'creation_date DESC',
+    );
+    if (data.isEmpty) return null;
+    return AccountingPeriod.fromSQLite(data.first);
+  }
+
+  @override
   Future<AccountingPeriod> save(AccountingPeriod entity) async {
     final Database db = await _context.database;
     final int id = await db.insert('periods', entity.toSQLite());

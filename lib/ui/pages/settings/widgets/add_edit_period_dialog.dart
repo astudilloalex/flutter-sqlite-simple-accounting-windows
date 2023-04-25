@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:simple_accounting_offline/src/accounting_period/domain/accounting_period.dart';
 
 class AddEditPeriodDialog extends StatefulWidget {
-  const AddEditPeriodDialog({super.key});
+  const AddEditPeriodDialog({
+    super.key,
+    this.period,
+  });
+
+  final AccountingPeriod? period;
 
   @override
   State<AddEditPeriodDialog> createState() => _AddEditPeriodDialogState();
@@ -19,12 +25,22 @@ class _AddEditPeriodDialogState extends State<AddEditPeriodDialog> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    startDateController.text = DateFormat('MMMM dd, yyyy').format(
-      DateTime(DateTime.now().year),
-    );
-    endDateController.text = DateFormat('MMMM dd, yyyy').format(
-      DateTime(DateTime.now().year, 12, 31),
-    );
+    if (widget.period != null) {
+      nameController.text = widget.period!.name;
+      startDateController.text = DateFormat('MMMM dd, yyyy').format(
+        widget.period!.startDate,
+      );
+      endDateController.text = DateFormat('MMMM dd, yyyy').format(
+        widget.period!.endDate,
+      );
+    } else {
+      startDateController.text = DateFormat('MMMM dd, yyyy').format(
+        DateTime(DateTime.now().year),
+      );
+      endDateController.text = DateFormat('MMMM dd, yyyy').format(
+        DateTime(DateTime.now().year, 12, 31),
+      );
+    }
   }
 
   @override
@@ -91,24 +107,24 @@ class _AddEditPeriodDialogState extends State<AddEditPeriodDialog> {
                     }
                     return null;
                   },
-                  onTap: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now().subtract(
-                        const Duration(days: 365),
-                      ),
-                      lastDate: DateTime.now().add(const Duration(days: 365)),
-                    ).then((value) {
-                      if (value != null) {
-                        startDateController.text = DateFormat(
-                          'MMMM dd, yyyy',
-                        ).format(
-                          value,
-                        );
-                      }
-                    });
-                  },
+                  // onTap: () {
+                  //   showDatePicker(
+                  //     context: context,
+                  //     initialDate: DateTime.now(),
+                  //     firstDate: DateTime.now().subtract(
+                  //       const Duration(days: 365),
+                  //     ),
+                  //     lastDate: DateTime.now().add(const Duration(days: 365)),
+                  //   ).then((value) {
+                  //     if (value != null) {
+                  //       startDateController.text = DateFormat(
+                  //         'MMMM dd, yyyy',
+                  //       ).format(
+                  //         value,
+                  //       );
+                  //     }
+                  //   });
+                  // },
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
@@ -133,24 +149,24 @@ class _AddEditPeriodDialogState extends State<AddEditPeriodDialog> {
                     }
                     return null;
                   },
-                  onTap: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now().subtract(
-                        const Duration(days: 365),
-                      ),
-                      lastDate: DateTime.now().add(const Duration(days: 365)),
-                    ).then((value) {
-                      if (value != null) {
-                        endDateController.text = DateFormat(
-                          'MMMM dd, yyyy',
-                        ).format(
-                          value,
-                        );
-                      }
-                    });
-                  },
+                  // onTap: () {
+                  //   showDatePicker(
+                  //     context: context,
+                  //     initialDate: DateTime.now(),
+                  //     firstDate: DateTime.now().subtract(
+                  //       const Duration(days: 365),
+                  //     ),
+                  //     lastDate: DateTime.now().add(const Duration(days: 365)),
+                  //   ).then((value) {
+                  //     if (value != null) {
+                  //       endDateController.text = DateFormat(
+                  //         'MMMM dd, yyyy',
+                  //       ).format(
+                  //         value,
+                  //       );
+                  //     }
+                  //   });
+                  // },
                 ),
                 const SizedBox(height: 16.0),
                 // Action buttons
@@ -185,5 +201,17 @@ class _AddEditPeriodDialogState extends State<AddEditPeriodDialog> {
     if (!formKey.currentState!.validate()) {
       return;
     }
+    context.pop(
+      AccountingPeriod(
+        creationDate: widget.period?.creationDate ?? DateTime.now(),
+        endDate: DateFormat('MMMM dd, yyyy').parse(endDateController.text),
+        name: nameController.text,
+        startDate: DateFormat('MMMM dd, yyyy').parse(startDateController.text),
+        updateDate: DateTime.now(),
+        userId: 0,
+        id: widget.period?.id,
+        code: widget.period?.code ?? '',
+      ),
+    );
   }
 }

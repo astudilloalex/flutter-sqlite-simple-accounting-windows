@@ -28,11 +28,15 @@ class AccountingPeriodService {
   }
 
   Future<AccountingPeriod> update(AccountingPeriod entity) {
-    return _repository.save(
+    return _repository.update(
       entity.copyWith(
         name: entity.name.trim().toUpperCase(),
         userId: _storageService.currentUserId,
       ),
     );
+  }
+
+  Future<AccountingPeriod?> findByYear(DateTime year) {
+    return _repository.findPeriodByYear(year);
   }
 }

@@ -31,4 +31,32 @@ class SettingsCubit extends Cubit<SettingsState> {
       );
     }
   }
+
+  Future<String?> addPeriod(AccountingPeriod period) async {
+    try {
+      final AccountingPeriod? finded =
+          await _service.findByYear(period.startDate);
+      if (finded != null) return 'already-exists-period-in-the-year';
+      await _service.save(period);
+      await load();
+    } on Exception catch (e) {
+      return e.toString();
+    }
+    return null;
+  }
+
+  Future<String?> updatePeriod(AccountingPeriod period) async {
+    try {
+      final AccountingPeriod? finded =
+          await _service.findByYear(period.startDate);
+      if (finded != null && finded.id != period.id) {
+        return 'already-exists-period-in-the-year';
+      }
+      await _service.update(period);
+      await load();
+    } on Exception catch (e) {
+      return e.toString();
+    }
+    return null;
+  }
 }

@@ -4,6 +4,7 @@ abstract class IAccountingPeriodRepository {
   const IAccountingPeriodRepository();
 
   Future<List<AccountingPeriod>> findAll();
+  Future<AccountingPeriod?> findPeriodByYear(DateTime year);
   Future<AccountingPeriod> save(AccountingPeriod entity);
   Future<AccountingPeriod> update(AccountingPeriod entity);
 }
