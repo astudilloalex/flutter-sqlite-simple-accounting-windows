@@ -11,6 +11,9 @@ import 'package:simple_accounting_offline/src/account_category/infrastructure/ac
 import 'package:simple_accounting_offline/src/account_type/application/account_type_service.dart';
 import 'package:simple_accounting_offline/src/account_type/domain/i_account_type_repository.dart';
 import 'package:simple_accounting_offline/src/account_type/infrastructure/account_type_sqlite_repository.dart';
+import 'package:simple_accounting_offline/src/accounting_period/application/accounting_period_service.dart';
+import 'package:simple_accounting_offline/src/accounting_period/domain/i_accounting_period_repository.dart';
+import 'package:simple_accounting_offline/src/accounting_period/infrastructure/accounting_period_sqlite_repository.dart';
 import 'package:simple_accounting_offline/src/user/application/user_service.dart';
 import 'package:simple_accounting_offline/src/user/domain/i_user_repository.dart';
 import 'package:simple_accounting_offline/src/user/infrastructure/user_sqlite_repository.dart';
@@ -31,6 +34,9 @@ void setUpGetIt() {
   );
   getIt.registerLazySingleton<IAccountTypeRepository>(
     () => AccountTypeSQLiteRepository(getIt<SQLite>()),
+  );
+  getIt.registerLazySingleton<IAccountingPeriodRepository>(
+    () => AccountingPeriodSQLiteRepository(getIt<SQLite>()),
   );
   getIt.registerLazySingleton<IUserRepository>(
     () => UserSQLiteRepository(getIt<SQLite>()),
@@ -53,6 +59,12 @@ void setUpGetIt() {
   );
   getIt.registerFactory<AccountTypeService>(
     () => AccountTypeService(getIt<IAccountTypeRepository>()),
+  );
+  getIt.registerFactory<AccountingPeriodService>(
+    () => AccountingPeriodService(
+      getIt<IAccountingPeriodRepository>(),
+      getIt<GetStorageService>(),
+    ),
   );
   getIt.registerFactory<UserService>(
     () => UserService(getIt<IUserRepository>()),

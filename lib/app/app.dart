@@ -17,6 +17,8 @@ String messageFromCode(String code, BuildContext context) {
   final Map<String, String> errorMessages = {
     'user-not-found': localizations.userNotFound,
     'wrong-password': localizations.wrongPassword,
+    'already-exists-period-in-the-year':
+        localizations.alreadyExistsPeriodInTheYear,
   };
   return errorMessages[code] ?? code;
 }

@@ -1,0 +1,3 @@
+class AddSeatState {
+  const AddSeatState();
+}

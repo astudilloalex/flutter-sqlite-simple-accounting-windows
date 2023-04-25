@@ -1,3 +1,0 @@
-class ReportState {
-  const ReportState();
-}
