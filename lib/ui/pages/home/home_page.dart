@@ -8,6 +8,7 @@ import 'package:simple_accounting_offline/ui/pages/account/account_page.dart';
 import 'package:simple_accounting_offline/ui/pages/account/cubit/account_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/add_seat_page.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_form_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/dashboard/cubit/dashboard_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/dashboard/dashboard_page.dart';
 import 'package:simple_accounting_offline/ui/pages/detail/cubit/detail_cubit.dart';
@@ -31,8 +32,17 @@ class HomePage extends StatelessWidget {
         create: (context) => DetailCubit(),
         child: const DetailPage(),
       ),
-      BlocProvider(
-        create: (context) => AddSeatCubit(),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AddSeatCubit(
+              getIt<AccountingPeriodService>(),
+            )..load(),
+          ),
+          BlocProvider(
+            create: (context) => AddSeatFormCubit(),
+          ),
+        ],
         child: const AddSeatPage(),
       ),
       BlocProvider(

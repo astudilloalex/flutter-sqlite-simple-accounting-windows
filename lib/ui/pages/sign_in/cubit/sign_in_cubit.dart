@@ -37,7 +37,7 @@ class SignInCubit extends Cubit<SignInState> {
             json.decode(payload) as Map<String, Object?>;
         data.remove('expiration');
         data.addAll({'expiration': DateTime.now().toIso8601String()});
-        await _storageService.savePayloadSession(payload);
+        await _storageService.savePayloadSession(json.encode(data));
       }
     } on UnauthorizedException catch (e) {
       return e.code;
