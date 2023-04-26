@@ -10,6 +10,9 @@ class AddSeatDescriptionInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: InputDecoration(
+        labelText: AppLocalizations.of(context)!.description,
+      ),
       maxLines: 4,
       minLines: 3,
       maxLength: 500,

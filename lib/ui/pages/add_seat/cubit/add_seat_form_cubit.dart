@@ -9,4 +9,8 @@ class AddSeatFormCubit extends Cubit<AddSeatFormState> {
   void changePeriod(int? periodId) {
     emit(state.copyWith(selectedPeriodId: periodId));
   }
+
+  void changeDate(DateTime date) {
+    emit(state.copyWith(date: date));
+  }
 }
