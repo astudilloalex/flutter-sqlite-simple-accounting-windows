@@ -52,8 +52,19 @@ class AccountSQLiteRepository implements IAccountRepository {
     final Database db = await _context.database;
     final List<Map<String, Object?>> data = await db.query(
       'accounts',
-      where: 'parent_id IS NOT NULL AND account_category_id = ?',
+      where: 'account_category_id = ?',
       whereArgs: [categoryId],
+      orderBy: 'code ASC',
+    );
+    return data.map((element) => Account.fromJson(element)).toList();
+  }
+
+  @override
+  Future<List<Account>> findMovementAccounts() async {
+    final Database db = await _context.database;
+    final List<Map<String, Object?>> data = await db.query(
+      'accounts',
+      where: 'account_type_id = 2',
       orderBy: 'code ASC',
     );
     return data.map((element) => Account.fromJson(element)).toList();

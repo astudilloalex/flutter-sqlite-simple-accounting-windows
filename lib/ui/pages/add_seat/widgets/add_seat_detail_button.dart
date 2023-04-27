@@ -18,6 +18,7 @@ class AddSeatDetailButton extends StatelessWidget {
               builder: (_) {
                 return const AddSeatDetailDialog();
               },
+              barrierDismissible: false,
             );
           },
           label: Text(AppLocalizations.of(context)!.add),

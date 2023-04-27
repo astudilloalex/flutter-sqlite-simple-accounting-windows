@@ -31,6 +31,10 @@ class AccountService {
     );
   }
 
+  Future<List<Account>> getMovementAccounts() {
+    return _repository.findMovementAccounts();
+  }
+
   Future<Account?> update(Account account) {
     return _repository.update(
       account.copyWith(
