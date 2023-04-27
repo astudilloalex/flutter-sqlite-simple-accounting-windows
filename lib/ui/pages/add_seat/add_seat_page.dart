@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/add_seat/widgets/add_seat_detail_button.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/widgets/add_seat_form.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/widgets/seat_detail_table.dart';
 
@@ -17,6 +18,7 @@ class AddSeatPage extends StatelessWidget {
             padding: EdgeInsets.all(16.0),
             child: AddSeatForm(),
           ),
+          const AddSeatDetailButton(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

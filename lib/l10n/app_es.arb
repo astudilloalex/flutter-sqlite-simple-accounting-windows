@@ -1,6 +1,7 @@
 {    
     "accountCategory": "Categoría de la cuenta",
     "accountingPeriods": "Periodos contables",
+    "account": "Cuenta",
     "accounts": "Cuentas",
     "accountType": "Tipo de cuenta",
     "accountWithSameCodeExists": "Ya existe una cuenta con el mismo código",
@@ -22,6 +23,8 @@
     "delete": "Borrar",
     "description": "Descripción",
     "details": "Detalles",
+    "documentNumber": "Número de documento",
+    "documentType": "Tipo de documento",
     "edit": "Editar",
     "endDate": "Fecha final",
     "expenses": "Gastos",

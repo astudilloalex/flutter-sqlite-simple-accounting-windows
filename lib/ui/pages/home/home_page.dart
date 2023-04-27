@@ -37,6 +37,7 @@ class HomePage extends StatelessWidget {
           BlocProvider(
             create: (context) => AddSeatCubit(
               getIt<AccountingPeriodService>(),
+              getIt<AccountService>(),
             )..load(),
           ),
           BlocProvider(
