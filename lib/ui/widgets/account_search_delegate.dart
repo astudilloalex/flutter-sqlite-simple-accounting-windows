@@ -38,6 +38,7 @@ class AccountSearchDelegate extends SearchDelegate<Account?> {
         return ListTile(
           title: Text(filter[index].name),
           trailing: Text(filter[index].code),
+          onTap: () => close(context, filter[index]),
         );
       },
     );
@@ -55,6 +56,7 @@ class AccountSearchDelegate extends SearchDelegate<Account?> {
         return ListTile(
           title: Text(filter[index].name),
           trailing: Text(filter[index].code),
+          onTap: () => close(context, filter[index]),
         );
       },
     );
