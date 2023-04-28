@@ -16,7 +16,7 @@ class AddSeatDetailDialog extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 650.0),
+          constraints: const BoxConstraints(maxWidth: 650.0, maxHeight: 625.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -28,7 +28,7 @@ class AddSeatDetailDialog extends StatelessWidget {
                 ),
               ),
               const Divider(),
-              const _Form(),
+              const Expanded(child: _Form()),
             ],
           ),
         ),
@@ -85,7 +85,6 @@ class _FormState extends State<_Form> {
     return Form(
       key: formKey,
       child: ListView(
-        shrinkWrap: true,
         children: [
           // Account
           ListTile(
