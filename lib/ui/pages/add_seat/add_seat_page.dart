@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:simple_accounting_offline/app/app.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/widgets/add_seat_detail_button.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/widgets/add_seat_form.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/widgets/seat_detail_table.dart';
+import 'package:simple_accounting_offline/ui/pages/home/cubit/home_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/home/home_page.dart';
 
 class AddSeatPage extends StatelessWidget {
   const AddSeatPage({super.key});
@@ -73,17 +76,11 @@ class AddSeatPage extends StatelessWidget {
                     onPressed:
                         context.watch<AddSeatCubit>().state.totalCredit ==
                                 context.watch<AddSeatCubit>().state.totalDebit
-                            ? () {}
+                            ? () => _save(context)
                             : null,
                     label: Text(AppLocalizations.of(context)!.save),
                     icon: const Icon(Icons.save_outlined),
                   ),
-                  // const SizedBox(width: 20.0),
-                  // ElevatedButton.icon(
-                  //   onPressed: () {},
-                  //   label: Text(AppLocalizations.of(context)!.cancel),
-                  //   icon: const Icon(Icons.cancel_outlined),
-                  // ),
                 ],
               ),
             ),
@@ -91,5 +88,16 @@ class AddSeatPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _save(BuildContext context) async {
+    final String? error = await context.read<AddSeatCubit>().saveSeat();
+    if (context.mounted) {
+      if (error != null) {
+        showErrorSnackbar(context, error);
+      } else {
+        context.read<HomeCubit>().changeCurrentIndex(0);
+      }
+    }
   }
 }

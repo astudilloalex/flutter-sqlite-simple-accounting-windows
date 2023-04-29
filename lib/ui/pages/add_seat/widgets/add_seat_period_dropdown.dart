@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_cubit.dart';
-import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_form_cubit.dart';
 
 class AddSeatPeriodDropdown extends StatelessWidget {
   const AddSeatPeriodDropdown({super.key});
@@ -30,7 +29,7 @@ class AddSeatPeriodDropdown extends StatelessWidget {
           )
           .toList(),
       onChanged: (value) {
-        context.read<AddSeatFormCubit>().changePeriod(value);
+        context.read<AddSeatCubit>().changePeriod(value);
       },
       validator: (value) {
         if (value == null) {

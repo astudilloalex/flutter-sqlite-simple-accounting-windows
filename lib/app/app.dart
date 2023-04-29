@@ -15,10 +15,12 @@ void showErrorSnackbar(BuildContext context, String errorCode) {
 String messageFromCode(String code, BuildContext context) {
   final AppLocalizations localizations = AppLocalizations.of(context)!;
   final Map<String, String> errorMessages = {
-    'user-not-found': localizations.userNotFound,
-    'wrong-password': localizations.wrongPassword,
+    'add-seat-details': localizations.addSeatDetails,
     'already-exists-period-in-the-year':
         localizations.alreadyExistsPeriodInTheYear,
+    'select-a-period': localizations.selectAPeriod,
+    'user-not-found': localizations.userNotFound,
+    'wrong-password': localizations.wrongPassword,
   };
   return errorMessages[code] ?? code;
 }

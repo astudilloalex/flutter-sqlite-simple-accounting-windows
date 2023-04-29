@@ -1,3 +1,5 @@
+import 'package:simple_accounting_offline/src/seat_detail/domain/seat_detail.dart';
+
 class Seat {
   const Seat({
     this.cancelled = false,
@@ -6,6 +8,7 @@ class Seat {
     this.description,
     this.id,
     required this.periodId,
+    this.seatDetails = const [],
     this.userId = 0,
   });
 
@@ -15,6 +18,7 @@ class Seat {
   final String? description;
   final int? id;
   final int periodId;
+  final List<SeatDetail> seatDetails;
   final int userId;
 
   Seat copyWith({
@@ -24,6 +28,7 @@ class Seat {
     String? description,
     int? id,
     int? periodId,
+    List<SeatDetail>? seatDetails,
     int? userId,
   }) {
     return Seat(
@@ -33,6 +38,7 @@ class Seat {
       description: description ?? this.description,
       id: id ?? this.id,
       periodId: periodId ?? this.periodId,
+      seatDetails: seatDetails ?? this.seatDetails,
       userId: userId ?? this.userId,
     );
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_form_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_cubit.dart';
 
 class AddSeatDateInput extends StatelessWidget {
   const AddSeatDateInput({super.key});
@@ -34,7 +34,7 @@ class AddSeatDateInput extends StatelessWidget {
               initialTime: TimeOfDay.now(),
             ).then((time) {
               if (time == null) return;
-              context.read<AddSeatFormCubit>().changeDate(
+              context.read<AddSeatCubit>().changeDate(
                     DateTime(
                       date.year,
                       date.month,
@@ -59,7 +59,7 @@ class AddSeatDateInput extends StatelessWidget {
               ),
               Text(
                 DateFormat('MMM dd, yyyy HH:mm').format(
-                  context.watch<AddSeatFormCubit>().state.date,
+                  context.watch<AddSeatCubit>().state.date,
                 ),
               ),
             ],
