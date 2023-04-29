@@ -20,6 +20,10 @@ class AccountService {
     return _repository.findByCode(code.trim());
   }
 
+  Future<Account?> getById(int id) {
+    return _repository.findById(id);
+  }
+
   Future<Account?> add(Account account) {
     return _repository.save(
       account.copyWith(

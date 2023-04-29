@@ -1,5 +1,8 @@
+import 'package:simple_accounting_offline/src/account/domain/account.dart';
+
 class SeatDetail {
   const SeatDetail({
+    this.account,
     required this.accountId,
     this.code = '',
     this.credit = 0.0,
@@ -11,6 +14,7 @@ class SeatDetail {
     this.seatId = 0,
   });
 
+  final Account? account;
   final int accountId;
   final String code;
   final double credit;

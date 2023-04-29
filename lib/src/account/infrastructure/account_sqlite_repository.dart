@@ -48,6 +48,18 @@ class AccountSQLiteRepository implements IAccountRepository {
   }
 
   @override
+  Future<Account?> findById(int id) async {
+    final Database db = await _context.database;
+    final List<Map<String, Object?>> data = await db.query(
+      'accounts',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (data.isEmpty) return null;
+    return Account.fromJson(data.first);
+  }
+
+  @override
   Future<List<Account>> findChildrenByCategory(int categoryId) async {
     final Database db = await _context.database;
     final List<Map<String, Object?>> data = await db.query(

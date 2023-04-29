@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -5,10 +6,16 @@ import 'package:go_router/go_router.dart';
 import 'package:simple_accounting_offline/app/services/get_it_service.dart';
 import 'package:simple_accounting_offline/src/account/application/account_service.dart';
 import 'package:simple_accounting_offline/src/account/domain/account.dart';
+import 'package:simple_accounting_offline/src/seat_detail/domain/seat_detail.dart';
 import 'package:simple_accounting_offline/ui/widgets/account_search_delegate.dart';
 
 class AddSeatDetailDialog extends StatelessWidget {
-  const AddSeatDetailDialog({super.key});
+  const AddSeatDetailDialog({
+    super.key,
+    this.seatDetail,
+  });
+
+  final SeatDetail? seatDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +35,7 @@ class AddSeatDetailDialog extends StatelessWidget {
                 ),
               ),
               const Divider(),
-              const Expanded(child: _Form()),
+              Expanded(child: _Form(seatDetail: seatDetail)),
             ],
           ),
         ),
@@ -38,7 +45,11 @@ class AddSeatDetailDialog extends StatelessWidget {
 }
 
 class _Form extends StatefulWidget {
-  const _Form();
+  const _Form({
+    this.seatDetail,
+  });
+
+  final SeatDetail? seatDetail;
 
   @override
   State<_Form> createState() => _FormState();
@@ -68,6 +79,7 @@ class _FormState extends State<_Form> {
         creditController.text = '';
       }
     });
+    _loadData();
   }
 
   @override
@@ -210,6 +222,27 @@ class _FormState extends State<_Form> {
     );
   }
 
+  Future<void> _loadData() async {
+    if (widget.seatDetail == null) return;
+    final Account? finded = await getIt<AccountService>().getById(
+      widget.seatDetail!.id ?? 0,
+    );
+    setState(() => selectedAccount = finded);
+    descriptionController.text = widget.seatDetail!.description ?? '';
+    documentController.text = widget.seatDetail!.documentNumber ?? '';
+    documentTypeController.text = widget.seatDetail!.documentType ?? '';
+    final Decimal credit = Decimal.parse(
+      widget.seatDetail!.credit.toString(),
+    );
+    final Decimal debit = Decimal.parse(
+      widget.seatDetail!.debit.toString(),
+    );
+    creditController.text =
+        credit.compareTo(Decimal.zero) == 0 ? '' : credit.toString();
+    debitController.text =
+        debit.compareTo(Decimal.zero) == 0 ? '' : debit.toString();
+  }
+
   void _save() {
     if (!formKey.currentState!.validate()) return;
     if (selectedAccount == null) {
@@ -218,6 +251,21 @@ class _FormState extends State<_Form> {
       });
       return;
     }
-    context.pop();
+    final Decimal? credit = Decimal.tryParse(creditController.text.trim());
+    final Decimal? debit = Decimal.tryParse(debitController.text.trim());
+    context.pop(
+      SeatDetail(
+        account: selectedAccount,
+        accountId: selectedAccount?.id ?? 0,
+        code: widget.seatDetail?.code ?? '',
+        credit: credit == null ? 0.0 : credit.toDouble(),
+        debit: debit == null ? 0.0 : debit.toDouble(),
+        description: descriptionController.text.trim().toUpperCase(),
+        documentNumber: documentController.text.trim().toUpperCase(),
+        documentType: documentController.text.trim().toUpperCase(),
+        id: widget.seatDetail?.id,
+        seatId: widget.seatDetail?.seatId ?? 0,
+      ),
+    );
   }
 }

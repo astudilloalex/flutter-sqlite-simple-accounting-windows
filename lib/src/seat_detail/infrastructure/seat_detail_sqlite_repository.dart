@@ -47,12 +47,12 @@ class SeatDetailSQLiteRepository implements ISeatDetailRepository {
   @override
   Future<List<SeatDetail>> saveAll(List<SeatDetail> entities) async {
     final Database db = await _context.database;
-    final Batch batch = db.batch();
+    final List<SeatDetail> saved = [];
     for (final SeatDetail element in entities) {
-      batch.insert('seat_details', element.toSQLite());
+      final int id = await db.insert('seat_details', element.toSQLite());
+      saved.add(element.copyWith(id: id));
     }
-    final List<Object?> data = await batch.commit();
-    return entities;
+    return saved;
   }
 
   @override
