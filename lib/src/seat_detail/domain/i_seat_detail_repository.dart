@@ -4,7 +4,7 @@ abstract class ISeatDetailRepository {
   const ISeatDetailRepository();
 
   Future<List<SeatDetail>> findAll();
-  Future<List<SeatDetail>> findAllBySeatIds(List<int> seatId);
+  Future<List<SeatDetail>> findAllBySeatIds(List<int> seatIds);
   Future<List<SeatDetail>> findBySeatId(int seatId);
   Future<SeatDetail> save(SeatDetail entity);
   Future<List<SeatDetail>> saveAll(List<SeatDetail> entities);
