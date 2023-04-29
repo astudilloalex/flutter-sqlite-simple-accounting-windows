@@ -76,14 +76,32 @@ class AddSeatCubit extends Cubit<AddSeatState> {
 
   void addOrUpdateSeatDetail(SeatDetail detail) {
     final List<SeatDetail> details = [...state.seatDetails];
-    if (detail.id == null) {
-      details.add(detail);
+    final int index = details.indexWhere(
+      (element) => element.code == detail.code,
+    );
+    if (index >= 0) {
+      details[index] = detail;
     } else {
-      final int i = details.indexWhere((element) => element.id == detail.id);
-      if (i >= 0) {
-        details[i] = detail;
-      }
+      details.add(detail);
     }
+    Decimal totalCredit = Decimal.zero;
+    Decimal totalDebit = Decimal.zero;
+    for (final SeatDetail element in details) {
+      totalCredit += Decimal.parse(element.credit.toString());
+      totalDebit += Decimal.parse(element.debit.toString());
+    }
+    emit(
+      state.copyWith(
+        seatDetails: details,
+        totalCredit: totalCredit.toString(),
+        totalDebit: totalDebit.toString(),
+      ),
+    );
+  }
+
+  void removeSeatDetail(String code) {
+    final List<SeatDetail> details = [...state.seatDetails];
+    details.removeWhere((element) => element.code == code);
     Decimal totalCredit = Decimal.zero;
     Decimal totalDebit = Decimal.zero;
     for (final SeatDetail element in details) {

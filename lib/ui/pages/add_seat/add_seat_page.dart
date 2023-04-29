@@ -8,7 +8,6 @@ import 'package:simple_accounting_offline/ui/pages/add_seat/widgets/add_seat_det
 import 'package:simple_accounting_offline/ui/pages/add_seat/widgets/add_seat_form.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/widgets/seat_detail_table.dart';
 import 'package:simple_accounting_offline/ui/pages/home/cubit/home_cubit.dart';
-import 'package:simple_accounting_offline/ui/pages/home/home_page.dart';
 
 class AddSeatPage extends StatelessWidget {
   const AddSeatPage({super.key});

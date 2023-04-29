@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:simple_accounting_offline/app/services/get_it_service.dart';
+import 'package:simple_accounting_offline/app/services/sqlite.dart';
 import 'package:simple_accounting_offline/src/account/application/account_service.dart';
 import 'package:simple_accounting_offline/src/account/domain/account.dart';
 import 'package:simple_accounting_offline/src/seat_detail/domain/seat_detail.dart';
@@ -225,7 +226,7 @@ class _FormState extends State<_Form> {
   Future<void> _loadData() async {
     if (widget.seatDetail == null) return;
     final Account? finded = await getIt<AccountService>().getById(
-      widget.seatDetail!.id ?? 0,
+      widget.seatDetail!.accountId,
     );
     setState(() => selectedAccount = finded);
     descriptionController.text = widget.seatDetail!.description ?? '';
@@ -257,7 +258,7 @@ class _FormState extends State<_Form> {
       SeatDetail(
         account: selectedAccount,
         accountId: selectedAccount?.id ?? 0,
-        code: widget.seatDetail?.code ?? '',
+        code: widget.seatDetail?.code ?? generateSQLiteCode(),
         credit: credit == null ? 0.0 : credit.toDouble(),
         debit: debit == null ? 0.0 : debit.toDouble(),
         description: descriptionController.text.trim().toUpperCase(),
