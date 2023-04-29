@@ -5,6 +5,10 @@ abstract class ISeatDetailRepository {
 
   Future<List<SeatDetail>> findAll();
   Future<List<SeatDetail>> findAllBySeatIds(List<int> seatIds);
+  Future<List<SeatDetail>> findAllBySeatIdsAndCategory(
+    List<int> seatIds,
+    int categoryId,
+  );
   Future<List<SeatDetail>> findBySeatId(int seatId);
   Future<SeatDetail> save(SeatDetail entity);
   Future<List<SeatDetail>> saveAll(List<SeatDetail> entities);

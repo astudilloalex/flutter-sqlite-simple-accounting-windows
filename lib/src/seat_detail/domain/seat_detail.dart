@@ -53,8 +53,8 @@ class SeatDetail {
     return SeatDetail(
       accountId: map['account_id']! as int,
       code: map['code']! as String,
-      credit: map['credit']! as double,
-      debit: map['debit']! as double,
+      credit: double.parse(map['credit'].toString()),
+      debit: double.parse(map['debit'].toString()),
       description: map['description'] as String?,
       documentNumber: map['document_number'] as String?,
       documentType: map['document_type'] as String?,

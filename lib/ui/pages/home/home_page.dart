@@ -5,6 +5,7 @@ import 'package:simple_accounting_offline/app/services/get_it_service.dart';
 import 'package:simple_accounting_offline/src/account/application/account_service.dart';
 import 'package:simple_accounting_offline/src/accounting_period/application/accounting_period_service.dart';
 import 'package:simple_accounting_offline/src/seat/application/seat_service.dart';
+import 'package:simple_accounting_offline/src/seat_detail/application/seat_detail_service.dart';
 import 'package:simple_accounting_offline/ui/pages/account/account_page.dart';
 import 'package:simple_accounting_offline/ui/pages/account/cubit/account_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/add_seat_page.dart';
@@ -25,7 +26,10 @@ class HomePage extends StatelessWidget {
     // Available widgets for rail.
     final List<Widget> widgets = <Widget>[
       BlocProvider(
-        create: (context) => DashboardCubit(),
+        create: (context) => DashboardCubit(
+          getIt<SeatService>(),
+          getIt<SeatDetailService>(),
+        )..load(),
         child: const DashboardPage(),
       ),
       BlocProvider(

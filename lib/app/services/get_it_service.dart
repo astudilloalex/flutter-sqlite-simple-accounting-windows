@@ -86,7 +86,10 @@ void setUpGetIt() {
     ),
   );
   getIt.registerFactory<SeatDetailService>(
-    () => SeatDetailService(getIt<ISeatDetailRepository>()),
+    () => SeatDetailService(
+      getIt<ISeatDetailRepository>(),
+      getIt<ISeatRepository>(),
+    ),
   );
   getIt.registerFactory<UserService>(
     () => UserService(getIt<IUserRepository>()),
