@@ -26,6 +26,7 @@ class SeatDetail {
   final int seatId;
 
   SeatDetail copyWith({
+    Account? account,
     int? accountId,
     String? code,
     double? credit,
@@ -37,6 +38,7 @@ class SeatDetail {
     int? seatId,
   }) {
     return SeatDetail(
+      account: account ?? this.account,
       accountId: accountId ?? this.accountId,
       code: code ?? this.code,
       credit: credit ?? this.credit,

@@ -22,6 +22,10 @@ class SeatDetailService {
     return _repository.saveAll(seatDetails);
   }
 
+  Future<List<SeatDetail>> getAllBySeatIds(List<int> seatIds) {
+    return _repository.findAllBySeatIds(seatIds);
+  }
+
   Future<List<SeatDetail>> getAllIncomeDetails(List<int> seatIds) {
     return _repository.findAllBySeatIdsAndCategory(seatIds, 4);
   }
