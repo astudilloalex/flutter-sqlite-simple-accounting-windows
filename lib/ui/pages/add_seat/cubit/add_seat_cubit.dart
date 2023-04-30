@@ -58,6 +58,14 @@ class AddSeatCubit extends Cubit<AddSeatState> {
           seatDetails: state.seatDetails,
         ),
       );
+      emit(
+        state.copyWith(
+          date: DateTime.now(),
+          seatDetails: [],
+          totalCredit: '0.0',
+          totalDebit: '0.0',
+        ),
+      );
     } on Exception catch (e) {
       return e.toString();
     } finally {

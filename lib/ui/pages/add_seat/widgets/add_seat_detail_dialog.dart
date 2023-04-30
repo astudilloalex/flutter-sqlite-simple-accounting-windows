@@ -119,7 +119,7 @@ class _FormState extends State<_Form> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
               side: BorderSide(
-                color: accountError == null ? Colors.teal : Colors.redAccent,
+                color: accountError == null ? Colors.black : Colors.redAccent,
               ),
             ),
             title: selectedAccount == null

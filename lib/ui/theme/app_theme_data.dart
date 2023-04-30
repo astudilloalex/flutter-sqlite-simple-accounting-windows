@@ -8,6 +8,7 @@ class AppThemeData {
   }
 
   static ThemeData get light {
+    const Color primary = Color(0xFFFFFFF0);
     return ThemeData.light().copyWith(
       useMaterial3: true,
       visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -17,7 +18,6 @@ class AppThemeData {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(color: Colors.teal),
         ),
       ),
       listTileTheme: ListTileThemeData(

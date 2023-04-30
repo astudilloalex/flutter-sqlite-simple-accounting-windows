@@ -22,7 +22,7 @@ class RoutePage {
         path: RouteName.home,
         builder: (context, state) {
           return BlocProvider(
-            create: (context) => HomeCubit(),
+            create: (context) => HomeCubit(getIt<GetStorageService>()),
             child: const HomePage(),
           );
         },

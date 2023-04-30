@@ -9,6 +9,7 @@ class Seat {
     this.id,
     required this.periodId,
     this.seatDetails = const [],
+    this.total = 0.0,
     this.userId = 0,
   });
 
@@ -19,6 +20,7 @@ class Seat {
   final int? id;
   final int periodId;
   final List<SeatDetail> seatDetails;
+  final double total;
   final int userId;
 
   Seat copyWith({
@@ -29,6 +31,7 @@ class Seat {
     int? id,
     int? periodId,
     List<SeatDetail>? seatDetails,
+    double? total,
     int? userId,
   }) {
     return Seat(
@@ -39,6 +42,7 @@ class Seat {
       id: id ?? this.id,
       periodId: periodId ?? this.periodId,
       seatDetails: seatDetails ?? this.seatDetails,
+      total: total ?? this.total,
       userId: userId ?? this.userId,
     );
   }
@@ -51,6 +55,7 @@ class Seat {
       description: map['description'] as String?,
       id: map['id']! as int,
       periodId: map['period_id']! as int,
+      total: double.parse(map['total'].toString()),
       userId: map['user_id']! as int,
     );
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:simple_accounting_offline/app/services/get_it_service.dart';
+import 'package:simple_accounting_offline/app/services/get_storage_service.dart';
 import 'package:simple_accounting_offline/src/account/application/account_service.dart';
 import 'package:simple_accounting_offline/src/accounting_period/application/accounting_period_service.dart';
 import 'package:simple_accounting_offline/src/seat/application/seat_service.dart';
@@ -17,6 +19,7 @@ import 'package:simple_accounting_offline/ui/pages/detail/detail_page.dart';
 import 'package:simple_accounting_offline/ui/pages/home/cubit/home_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/cubit/settings_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/settings_page.dart';
+import 'package:simple_accounting_offline/ui/routes/route_name.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -25,37 +28,48 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Available widgets for rail.
     final List<Widget> widgets = <Widget>[
-      BlocProvider(
-        create: (context) => DashboardCubit(
-          getIt<SeatService>(),
-          getIt<SeatDetailService>(),
-        )..load(),
-        child: const DashboardPage(),
-      ),
-      BlocProvider(
-        create: (context) => DetailCubit(),
-        child: const DetailPage(),
-      ),
-      BlocProvider(
-        create: (context) => AddSeatCubit(
-          getIt<AccountingPeriodService>(),
-          getIt<AccountService>(),
-          getIt<SeatService>(),
-        )..load(),
-        child: const AddSeatPage(),
-      ),
-      BlocProvider(
-        create: (context) => AccountCubit(
-          getIt<AccountService>(),
-        )..loadAccounts(1),
-        child: const AccountPage(),
-      ),
-      BlocProvider(
-        create: (context) => SettingsCubit(
-          getIt<AccountingPeriodService>(),
-        )..load(),
-        child: const SettingsPage(),
-      ),
+      if (context.read<HomeCubit>().roleId == 1)
+        BlocProvider(
+          create: (context) => DashboardCubit(
+            getIt<SeatService>(),
+            getIt<SeatDetailService>(),
+          )..load(),
+          child: const DashboardPage(),
+        ),
+      if (context.read<HomeCubit>().roleId == 1 ||
+          context.read<HomeCubit>().roleId == 2)
+        BlocProvider(
+          create: (context) => DetailCubit(
+            getIt<SeatService>(),
+            getIt<SeatDetailService>(),
+          )..load(),
+          child: const DetailPage(),
+        ),
+      if (context.read<HomeCubit>().roleId == 1 ||
+          context.read<HomeCubit>().roleId == 3)
+        BlocProvider(
+          create: (context) => AddSeatCubit(
+            getIt<AccountingPeriodService>(),
+            getIt<AccountService>(),
+            getIt<SeatService>(),
+          )..load(),
+          child: const AddSeatPage(),
+        ),
+      if (context.read<HomeCubit>().roleId == 1)
+        BlocProvider(
+          create: (context) => AccountCubit(
+            getIt<AccountService>(),
+          )..loadAccounts(1),
+          child: const AccountPage(),
+        ),
+      if (context.read<HomeCubit>().roleId == 1 ||
+          context.read<HomeCubit>().roleId == 3)
+        BlocProvider(
+          create: (context) => SettingsCubit(
+            getIt<AccountingPeriodService>(),
+          )..load(),
+          child: const SettingsPage(),
+        ),
     ];
     return Scaffold(
       appBar: AppBar(
@@ -82,32 +96,70 @@ class HomePage extends StatelessWidget {
           label: Text(AppLocalizations.of(context)!.addMovement),
           icon: const Icon(Icons.add_outlined),
         ),
+        actions: [
+          PopupMenuButton<int>(
+            onSelected: (value) {
+              context.read<HomeCubit>().logout();
+              context.goNamed(RouteName.signIn);
+            },
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem<int>(
+                  value: 0,
+                  child: Text(AppLocalizations.of(context)!.logout),
+                ),
+              ];
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.person_outlined),
+                  const SizedBox(width: 10.0),
+                  Text(
+                    getIt<GetStorageService>().currentUsername ?? '',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       body: Row(
         children: [
           NavigationRail(
             extended: context.watch<HomeCubit>().state.extendedRail,
             destinations: [
-              NavigationRailDestination(
-                icon: const Icon(Icons.dashboard_outlined),
-                label: Text(AppLocalizations.of(context)!.dashboard),
-              ),
-              NavigationRailDestination(
-                icon: const Icon(Icons.wallet_outlined),
-                label: Text(AppLocalizations.of(context)!.details),
-              ),
+              if (context.read<HomeCubit>().roleId == 1)
+                NavigationRailDestination(
+                  icon: const Icon(Icons.dashboard_outlined),
+                  label: Text(AppLocalizations.of(context)!.dashboard),
+                ),
+              if (context.read<HomeCubit>().roleId == 1 ||
+                  context.read<HomeCubit>().roleId == 2)
+                NavigationRailDestination(
+                  icon: const Icon(Icons.wallet_outlined),
+                  label: Text(AppLocalizations.of(context)!.details),
+                ),
               NavigationRailDestination(
                 icon: const Icon(Icons.add_circle_outlined),
                 label: Text(AppLocalizations.of(context)!.add),
               ),
-              NavigationRailDestination(
-                icon: const Icon(Icons.account_balance_outlined),
-                label: Text(AppLocalizations.of(context)!.accounts),
-              ),
-              NavigationRailDestination(
-                icon: const Icon(Icons.settings_outlined),
-                label: Text(AppLocalizations.of(context)!.settings),
-              ),
+              if (context.read<HomeCubit>().roleId == 1)
+                NavigationRailDestination(
+                  icon: const Icon(Icons.account_balance_outlined),
+                  label: Text(AppLocalizations.of(context)!.accounts),
+                ),
+              if (context.read<HomeCubit>().roleId == 1 ||
+                  context.read<HomeCubit>().roleId == 3)
+                NavigationRailDestination(
+                  icon: const Icon(Icons.settings_outlined),
+                  label: Text(AppLocalizations.of(context)!.settings),
+                ),
             ],
             onDestinationSelected: (value) {
               context.read<HomeCubit>().changeCurrentIndex(value);

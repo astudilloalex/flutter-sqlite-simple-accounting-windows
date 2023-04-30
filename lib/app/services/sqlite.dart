@@ -24,6 +24,10 @@ class SQLite {
     );
   }
 
+  Future<void> _onConfigure(Database database) async {
+    await database.execute("PRAGMA foreign_keys = ON");
+  }
+
   // On create database insert and create default tables.
   Future<void> _onCreate(Database database, int version) async {
     final Batch batch = database.batch();
@@ -255,10 +259,6 @@ class SQLite {
     );
     await batch.commit();
   }
-
-  Future<void> _onConfigure(Database database) async {
-    await database.execute("PRAGMA foreign_keys = ON");
-  }
 }
 
 const String _createSQLV1 = '''
@@ -341,6 +341,7 @@ CREATE TABLE seats(
   date DATETIME NOT NULL,
   description VARCHAR(500),
   canceled BOOLEAN NOT NULL,
+  total NUMERIC(19,5) DEFAULT 0.0 NOT NULL,
   FOREIGN KEY (period_id) REFERENCES periods(id),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -358,6 +359,22 @@ CREATE TABLE seat_details(
   FOREIGN KEY (seat_id) REFERENCES seats(id),
   FOREIGN KEY (account_id) REFERENCES accounts(id)
 );
+
+CREATE TRIGGER calculate_total_seat_insert
+AFTER INSERT ON seat_details
+BEGIN
+  UPDATE seats SET total = (
+    SELECT SUM(debit) FROM seat_details WHERE seat_id = NEW.seat_id
+  ) WHERE id = NEW.seat_id;
+END;
+
+CREATE TRIGGER calculate_total_seat_update
+AFTER UPDATE ON seat_details
+BEGIN
+  UPDATE seats SET total = (
+    SELECT SUM(debit) FROM seat_details WHERE seat_id = OLD.seat_id
+  ) WHERE id = OLD.seat_id;
+END;
 ''';
 
 String generateSQLiteCode([int length = 20]) {

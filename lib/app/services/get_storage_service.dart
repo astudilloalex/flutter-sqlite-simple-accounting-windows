@@ -19,7 +19,23 @@ class GetStorageService {
     return payload['userId'] as int?;
   }
 
-  Future<void> savePayloadSession(String payloadSession) {
+  int? get currentRoleId {
+    final String? data = _storage.read<String?>('sessionPayload');
+    if (data == null) return null;
+    final Map<String, Object?> payload =
+        json.decode(data) as Map<String, Object?>;
+    return payload['roleId'] as int?;
+  }
+
+  String? get currentUsername {
+    final String? data = _storage.read<String?>('sessionPayload');
+    if (data == null) return null;
+    final Map<String, Object?> payload =
+        json.decode(data) as Map<String, Object?>;
+    return payload['username'] as String?;
+  }
+
+  Future<void> savePayloadSession(String? payloadSession) {
     return _storage.write('sessionPayload', payloadSession);
   }
 }
