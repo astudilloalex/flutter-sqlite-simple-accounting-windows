@@ -4,11 +4,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:simple_accounting_offline/app/services/get_it_service.dart';
 import 'package:simple_accounting_offline/src/account/application/account_service.dart';
 import 'package:simple_accounting_offline/src/accounting_period/application/accounting_period_service.dart';
+import 'package:simple_accounting_offline/src/seat/application/seat_service.dart';
 import 'package:simple_accounting_offline/ui/pages/account/account_page.dart';
 import 'package:simple_accounting_offline/ui/pages/account/cubit/account_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/add_seat_page.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_cubit.dart';
-import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_form_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/dashboard/cubit/dashboard_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/dashboard/dashboard_page.dart';
 import 'package:simple_accounting_offline/ui/pages/detail/cubit/detail_cubit.dart';
@@ -32,18 +32,12 @@ class HomePage extends StatelessWidget {
         create: (context) => DetailCubit(),
         child: const DetailPage(),
       ),
-      MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => AddSeatCubit(
-              getIt<AccountingPeriodService>(),
-              getIt<AccountService>(),
-            )..load(),
-          ),
-          BlocProvider(
-            create: (context) => AddSeatFormCubit(),
-          ),
-        ],
+      BlocProvider(
+        create: (context) => AddSeatCubit(
+          getIt<AccountingPeriodService>(),
+          getIt<AccountService>(),
+          getIt<SeatService>(),
+        )..load(),
         child: const AddSeatPage(),
       ),
       BlocProvider(

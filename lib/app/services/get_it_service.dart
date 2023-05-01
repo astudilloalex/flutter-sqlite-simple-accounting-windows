@@ -14,6 +14,12 @@ import 'package:simple_accounting_offline/src/account_type/infrastructure/accoun
 import 'package:simple_accounting_offline/src/accounting_period/application/accounting_period_service.dart';
 import 'package:simple_accounting_offline/src/accounting_period/domain/i_accounting_period_repository.dart';
 import 'package:simple_accounting_offline/src/accounting_period/infrastructure/accounting_period_sqlite_repository.dart';
+import 'package:simple_accounting_offline/src/seat/application/seat_service.dart';
+import 'package:simple_accounting_offline/src/seat/domain/i_seat_repository.dart';
+import 'package:simple_accounting_offline/src/seat/infrastructure/seat_sqlite_repository.dart';
+import 'package:simple_accounting_offline/src/seat_detail/application/seat_detail_service.dart';
+import 'package:simple_accounting_offline/src/seat_detail/domain/i_seat_detail_repository.dart';
+import 'package:simple_accounting_offline/src/seat_detail/infrastructure/seat_detail_sqlite_repository.dart';
 import 'package:simple_accounting_offline/src/user/application/user_service.dart';
 import 'package:simple_accounting_offline/src/user/domain/i_user_repository.dart';
 import 'package:simple_accounting_offline/src/user/infrastructure/user_sqlite_repository.dart';
@@ -37,6 +43,12 @@ void setUpGetIt() {
   );
   getIt.registerLazySingleton<IAccountingPeriodRepository>(
     () => AccountingPeriodSQLiteRepository(getIt<SQLite>()),
+  );
+  getIt.registerLazySingleton<ISeatRepository>(
+    () => SeatSQLiteRepository(getIt<SQLite>()),
+  );
+  getIt.registerLazySingleton<ISeatDetailRepository>(
+    () => SeatDetailSQLiteRepository(getIt<SQLite>()),
   );
   getIt.registerLazySingleton<IUserRepository>(
     () => UserSQLiteRepository(getIt<SQLite>()),
@@ -65,6 +77,16 @@ void setUpGetIt() {
       getIt<IAccountingPeriodRepository>(),
       getIt<GetStorageService>(),
     ),
+  );
+  getIt.registerFactory<SeatService>(
+    () => SeatService(
+      getIt<ISeatRepository>(),
+      getIt<ISeatDetailRepository>(),
+      getIt<GetStorageService>(),
+    ),
+  );
+  getIt.registerFactory<SeatDetailService>(
+    () => SeatDetailService(getIt<ISeatDetailRepository>()),
   );
   getIt.registerFactory<UserService>(
     () => UserService(getIt<IUserRepository>()),

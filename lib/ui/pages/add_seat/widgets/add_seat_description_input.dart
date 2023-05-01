@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_form_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/add_seat/cubit/add_seat_cubit.dart';
 
 class AddSeatDescriptionInput extends StatelessWidget {
   const AddSeatDescriptionInput({super.key});
@@ -17,7 +17,7 @@ class AddSeatDescriptionInput extends StatelessWidget {
       minLines: 3,
       maxLength: 500,
       onChanged: (value) {
-        context.read<AddSeatFormCubit>().description = value;
+        context.read<AddSeatCubit>().description = value;
       },
       validator: (value) {
         if (value == null || value.trim().isEmpty) {
