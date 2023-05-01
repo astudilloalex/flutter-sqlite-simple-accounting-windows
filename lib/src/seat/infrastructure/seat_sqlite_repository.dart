@@ -18,12 +18,8 @@ class SeatSQLiteRepository implements ISeatRepository {
     final List<Map<String, Object?>> data = await db.rawQuery(
       'SELECT * FROM seats WHERE date BETWEEN ? AND ?',
       [
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(
-          startDate.copyWith(hour: 0, minute: 0, second: 0),
-        ),
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(
-          startDate.copyWith(hour: 23, minute: 59, second: 59),
-        ),
+        startDate.copyWith(hour: 0, minute: 0, second: 0).toIso8601String(),
+        endDate.copyWith(hour: 23, minute: 59, second: 59).toIso8601String(),
       ],
     );
 

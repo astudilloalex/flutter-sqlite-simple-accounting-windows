@@ -6,13 +6,20 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600.0),
-          child: const IncomesChart(),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListView(
+        children: [
+          Wrap(
+            children: [
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600.0),
+                child: const IncomesChart(),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
