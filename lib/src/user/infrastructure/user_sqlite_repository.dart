@@ -27,6 +27,13 @@ class UserSQLiteRepository implements IUserRepository {
   }
 
   @override
+  Future<List<User>> findAll() async {
+    final Database db = await _context.database;
+    final List<Map<String, Object?>> data = await db.query('users');
+    return data.map((map) => User.fromJson(map)).toList();
+  }
+
+  @override
   Future<User?> findById(int id) async {
     final Database db = await _context.database;
     final List<Map<String, Object?>> data = await db.query(

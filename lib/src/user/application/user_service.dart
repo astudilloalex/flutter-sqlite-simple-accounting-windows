@@ -13,6 +13,10 @@ class UserService {
   final IUserRepository _repository;
   final GetStorageService _storageService;
 
+  Future<List<User>> getAll() {
+    return _repository.findAll();
+  }
+
   Future<User> save(User user) {
     return _repository.save(
       user.copyWith(
