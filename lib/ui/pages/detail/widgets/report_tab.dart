@@ -35,7 +35,19 @@ class ReportTab extends StatelessWidget {
               label: Text(AppLocalizations.of(context)!.journalBook),
             ),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                context.pushNamed(
+                  RouteName.pdfIncomeStatement,
+                  queryParams: {
+                    'start_date': DateFormat('yyyy-MM-dd').format(
+                      context.read<DetailCubit>().state.startDate,
+                    ),
+                    'end_date': DateFormat('yyyy-MM-dd').format(
+                      context.read<DetailCubit>().state.endDate,
+                    ),
+                  },
+                );
+              },
               icon: const Icon(Icons.monetization_on_outlined),
               label: Text(AppLocalizations.of(context)!.incomeStatement),
             ),

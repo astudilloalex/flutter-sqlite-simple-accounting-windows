@@ -5,6 +5,7 @@ class RouteName {
   const RouteName._();
 
   static const String home = '/home';
+  static const String pdfIncomeStatement = '/pdf-income-statement';
   static const String pdfJourneyBook = '/pdf-journey-book';
   static const String signIn = '/sign-in';
   static const String splash = '/splash';
