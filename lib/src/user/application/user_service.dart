@@ -2,14 +2,16 @@ import 'dart:convert';
 
 import 'package:bcrypt/bcrypt.dart';
 import 'package:simple_accounting_offline/app/exception.dart';
+import 'package:simple_accounting_offline/app/services/get_storage_service.dart';
 import 'package:simple_accounting_offline/app/services/sqlite.dart';
 import 'package:simple_accounting_offline/src/user/domain/i_user_repository.dart';
 import 'package:simple_accounting_offline/src/user/domain/user.dart';
 
 class UserService {
-  const UserService(this._repository);
+  const UserService(this._repository, this._storageService);
 
   final IUserRepository _repository;
+  final GetStorageService _storageService;
 
   Future<User> save(User user) {
     return _repository.save(
@@ -46,5 +48,22 @@ class UserService {
       'issuer': 'https://www.alexastudillo.com/',
     };
     return json.encode(payload);
+  }
+
+  Future<void> changePassword(
+    String previousPassword,
+    String newPassword,
+  ) async {
+    final User? user = await _repository.findById(
+      _storageService.currentUserId ?? 0,
+    );
+    if (user == null) throw const AccountException('user-not-found');
+    if (!BCrypt.checkpw(previousPassword, user.password)) {
+      throw const AccountException('wrong-password');
+    }
+    return _repository.changePassword(
+      user.id ?? 0,
+      BCrypt.hashpw(newPassword, BCrypt.gensalt()),
+    );
   }
 }

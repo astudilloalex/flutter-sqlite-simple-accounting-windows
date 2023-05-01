@@ -9,15 +9,33 @@ class UserSQLiteRepository implements IUserRepository {
   final SQLite _context;
 
   @override
-  Future<void> changePassword(String password) async {
+  Future<void> changePassword(int id, String password) async {
     final Database db = await _context.database;
-    await db.rawUpdate("UPDATE users SET password = ?", [password]);
+    await db.rawUpdate(
+      "UPDATE users SET password = ? WHERE id = ?",
+      [password, id],
+    );
   }
 
   @override
-  Future<void> changeState({required bool active}) async {
+  Future<void> changeState(int id, {required bool active}) async {
     final Database db = await _context.database;
-    await db.rawUpdate("UPDATE users SET active = ?", [active]);
+    await db.rawUpdate(
+      "UPDATE users SET active = ? WHERE id = ?",
+      [active, id],
+    );
+  }
+
+  @override
+  Future<User?> findById(int id) async {
+    final Database db = await _context.database;
+    final List<Map<String, Object?>> data = await db.query(
+      'users',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (data.isEmpty) return null;
+    return User.fromJson(data.first);
   }
 
   @override

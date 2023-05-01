@@ -31,7 +31,9 @@ class MyApp extends StatelessWidget {
 }
 
 Future<void> _setUpData() async {
+  if (Platform.isWindows || Platform.isLinux) {
+    sqfliteFfiInit();
+  }
   await GetStorage.init();
   setUpGetIt();
-  if (Platform.isWindows || Platform.isLinux) sqfliteFfiInit();
 }

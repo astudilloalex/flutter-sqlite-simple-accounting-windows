@@ -92,6 +92,9 @@ void setUpGetIt() {
     ),
   );
   getIt.registerFactory<UserService>(
-    () => UserService(getIt<IUserRepository>()),
+    () => UserService(
+      getIt<IUserRepository>(),
+      getIt<GetStorageService>(),
+    ),
   );
 }
