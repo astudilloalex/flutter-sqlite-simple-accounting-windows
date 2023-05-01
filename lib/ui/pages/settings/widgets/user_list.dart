@@ -22,27 +22,26 @@ class UserList extends StatelessWidget {
       itemCount: state.users.length,
       itemBuilder: (context, index) {
         final User user = state.users[index];
-        // if (user.id == 1) {
-        //   return Tooltip(
-        //     message: AppLocalizations.of(context)!.userCannotBeModified,
-        //     child: AbsorbPointer(
-        //       absorbing: false,
-        //       child: ListTile(
-        //         tileColor: Colors.blueGrey.withOpacity(0.25),
-        //         title: Text(user.username),
-        //         subtitle: Text(
-        //           user.role?.name ?? '',
-        //         ),
-        //         leading: _ChangeUserStateSwitch(user),
-        //         trailing: IconButton(
-        //           onPressed: () {},
-        //           icon: const Icon(Icons.lock_outlined),
-        //           color: Colors.teal,
-        //         ),
-        //       ),
-        //     ),
-        //   );
-        // }
+        if (user.id == 1) {
+          return Tooltip(
+            message: AppLocalizations.of(context)!.userCannotBeModified,
+            child: AbsorbPointer(
+              child: ListTile(
+                tileColor: Colors.blueGrey.withOpacity(0.25),
+                title: Text(user.username),
+                subtitle: Text(
+                  user.role?.name ?? '',
+                ),
+                leading: _ChangeUserStateSwitch(user),
+                trailing: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.lock_outlined),
+                  color: Colors.teal,
+                ),
+              ),
+            ),
+          );
+        }
         return ListTile(
           title: Text(user.username),
           subtitle: Text(

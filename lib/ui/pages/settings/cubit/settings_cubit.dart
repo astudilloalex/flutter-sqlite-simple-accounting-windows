@@ -96,4 +96,8 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
     return null;
   }
+
+  Future<String?> addUser(User user) async {
+    return null;
+  }
 }
