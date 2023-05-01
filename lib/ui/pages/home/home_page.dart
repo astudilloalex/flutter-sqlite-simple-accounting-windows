@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:simple_accounting_offline/app/app.dart';
 import 'package:simple_accounting_offline/app/services/get_it_service.dart';
 import 'package:simple_accounting_offline/app/services/get_storage_service.dart';
 import 'package:simple_accounting_offline/src/account/application/account_service.dart';
@@ -17,6 +18,7 @@ import 'package:simple_accounting_offline/ui/pages/dashboard/dashboard_page.dart
 import 'package:simple_accounting_offline/ui/pages/detail/cubit/detail_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/detail/detail_page.dart';
 import 'package:simple_accounting_offline/ui/pages/home/cubit/home_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/home/widgets/change_password_dialog.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/cubit/settings_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/settings_page.dart';
 import 'package:simple_accounting_offline/ui/routes/route_name.dart';
@@ -99,13 +101,24 @@ class HomePage extends StatelessWidget {
         actions: [
           PopupMenuButton<int>(
             onSelected: (value) {
-              context.read<HomeCubit>().logout();
-              context.goNamed(RouteName.signIn);
+              switch (value) {
+                case 0:
+                  _changePassword(context);
+                  break;
+                default:
+                  context.read<HomeCubit>().logout();
+                  context.goNamed(RouteName.signIn);
+                  break;
+              }
             },
             itemBuilder: (context) {
               return [
                 PopupMenuItem<int>(
                   value: 0,
+                  child: Text(AppLocalizations.of(context)!.changePassword),
+                ),
+                PopupMenuItem<int>(
+                  value: 1,
                   child: Text(AppLocalizations.of(context)!.logout),
                 ),
               ];
@@ -177,5 +190,17 @@ class HomePage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _changePassword(BuildContext context) async {
+    showDialog<List<String>?>(
+      context: context,
+      builder: (context) => const ChangePasswordDialog(),
+    ).then((value) async {
+      if (value == null) return;
+      final String? error =
+          await context.read<HomeCubit>().changePassword(value);
+      if (error != null && context.mounted) showErrorSnackbar(context, error);
+    });
   }
 }
