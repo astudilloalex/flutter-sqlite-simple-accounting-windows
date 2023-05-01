@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:simple_accounting_offline/src/user/domain/user.dart';
 
 class ChangePasswordDialog extends StatefulWidget {
-  const ChangePasswordDialog({super.key});
+  const ChangePasswordDialog({
+    super.key,
+    required this.user,
+  });
+
+  final User user;
 
   @override
   State<ChangePasswordDialog> createState() => _ChangePasswordDialogState();
@@ -11,16 +17,12 @@ class ChangePasswordDialog extends StatefulWidget {
 
 class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController prevPasswordController = TextEditingController();
-  final TextEditingController newPasswordController = TextEditingController();
-
-  bool viewOldPassword = false;
-  bool viewNewPassword = false;
+  final TextEditingController passwordController = TextEditingController();
+  bool viewPassword = false;
 
   @override
   void dispose() {
-    prevPasswordController.dispose();
-    newPasswordController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -37,7 +39,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
               shrinkWrap: true,
               children: [
                 Text(
-                  AppLocalizations.of(context)!.changePassword,
+                  '${AppLocalizations.of(context)!.changePassword} -> ${widget.user.username}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0,
@@ -45,33 +47,16 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                 ),
                 const Divider(height: 20.0),
                 TextFormField(
-                  controller: prevPasswordController,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.oldPassword,
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() => viewOldPassword = !viewOldPassword);
-                      },
-                      icon: Icon(
-                        viewOldPassword
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                      ),
-                    ),
-                  ),
-                  obscureText: !viewOldPassword,
-                ),
-                const SizedBox(height: 20.0),
-                TextFormField(
-                  controller: newPasswordController,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  controller: passwordController,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.newPassword,
                     suffixIcon: IconButton(
                       onPressed: () {
-                        setState(() => viewNewPassword = !viewNewPassword);
+                        setState(() => viewPassword = !viewPassword);
                       },
                       icon: Icon(
-                        viewNewPassword
+                        viewPassword
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
                       ),
@@ -83,10 +68,9 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                     }
                     return null;
                   },
-                  obscureText: !viewNewPassword,
+                  obscureText: !viewPassword,
                 ),
-                // Actions
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 16.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -104,12 +88,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                         if (!formKey.currentState!.validate()) {
                           return;
                         }
-                        context.pop(
-                          <String>[
-                            prevPasswordController.text.trim(),
-                            newPasswordController.text.trim(),
-                          ],
-                        );
+                        context.pop(passwordController.text.trim());
                       },
                       icon: const Icon(Icons.save_outlined),
                       label: Text(AppLocalizations.of(context)!.save),

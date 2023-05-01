@@ -7,6 +7,7 @@ import 'package:simple_accounting_offline/app/services/get_it_service.dart';
 import 'package:simple_accounting_offline/app/services/get_storage_service.dart';
 import 'package:simple_accounting_offline/src/account/application/account_service.dart';
 import 'package:simple_accounting_offline/src/accounting_period/application/accounting_period_service.dart';
+import 'package:simple_accounting_offline/src/role/application/role_service.dart';
 import 'package:simple_accounting_offline/src/seat/application/seat_service.dart';
 import 'package:simple_accounting_offline/src/seat_detail/application/seat_detail_service.dart';
 import 'package:simple_accounting_offline/src/user/application/user_service.dart';
@@ -70,6 +71,7 @@ class HomePage extends StatelessWidget {
         BlocProvider(
           create: (context) => SettingsCubit(
             getIt<AccountingPeriodService>(),
+            getIt<RoleService>(),
             getIt<UserService>(),
           )..load(),
           child: const SettingsPage(),
@@ -197,6 +199,7 @@ class HomePage extends StatelessWidget {
   Future<void> _changePassword(BuildContext context) async {
     showDialog<List<String>?>(
       context: context,
+      barrierDismissible: false,
       builder: (context) => const ChangePasswordDialog(),
     ).then((value) async {
       if (value == null) return;

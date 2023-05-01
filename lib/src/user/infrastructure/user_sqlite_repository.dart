@@ -22,7 +22,7 @@ class UserSQLiteRepository implements IUserRepository {
     final Database db = await _context.database;
     await db.rawUpdate(
       "UPDATE users SET active = ? WHERE id = ?",
-      [active, id],
+      [if (active) 1 else 0, id],
     );
   }
 

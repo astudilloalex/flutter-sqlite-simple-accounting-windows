@@ -70,4 +70,18 @@ class UserService {
       BCrypt.hashpw(newPassword, BCrypt.gensalt()),
     );
   }
+
+  Future<void> changePasswordByAdmin(String password, int userId) {
+    return _repository.changePassword(
+      userId,
+      BCrypt.hashpw(password, BCrypt.gensalt()),
+    );
+  }
+
+  Future<void> changeState({required bool state}) async {
+    return _repository.changeState(
+      _storageService.currentUserId ?? 0,
+      active: state,
+    );
+  }
 }
