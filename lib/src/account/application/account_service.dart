@@ -24,6 +24,10 @@ class AccountService {
     return _repository.findById(id);
   }
 
+  Future<List<Account>> getByIds(List<int> ids) {
+    return _repository.findByIds(ids);
+  }
+
   Future<Account?> add(Account account) {
     return _repository.save(
       account.copyWith(

@@ -1,4 +1,5 @@
 import 'package:simple_accounting_offline/src/account/domain/account.dart';
+import 'package:simple_accounting_offline/src/seat/domain/seat.dart';
 
 class SeatDetail {
   const SeatDetail({
@@ -11,6 +12,7 @@ class SeatDetail {
     this.documentNumber,
     this.documentType,
     this.id,
+    this.seat,
     this.seatId = 0,
   });
 
@@ -23,9 +25,11 @@ class SeatDetail {
   final String? documentNumber;
   final String? documentType;
   final int? id;
+  final Seat? seat;
   final int seatId;
 
   SeatDetail copyWith({
+    Account? account,
     int? accountId,
     String? code,
     double? credit,
@@ -34,9 +38,11 @@ class SeatDetail {
     String? documentNumber,
     String? documentType,
     int? id,
+    Seat? seat,
     int? seatId,
   }) {
     return SeatDetail(
+      account: account ?? this.account,
       accountId: accountId ?? this.accountId,
       code: code ?? this.code,
       credit: credit ?? this.credit,
@@ -45,6 +51,7 @@ class SeatDetail {
       documentNumber: documentNumber ?? this.documentNumber,
       documentType: documentType ?? this.documentType,
       id: id ?? this.id,
+      seat: seat ?? this.seat,
       seatId: seatId ?? this.seatId,
     );
   }

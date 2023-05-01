@@ -48,7 +48,12 @@ class SeatService {
   Future<List<Seat>> getByPeriod({
     required DateTime startDate,
     required DateTime endDate,
+    bool onlyActives = false,
   }) {
-    return _repository.findByDateRange(startDate: startDate, endDate: endDate);
+    return _repository.findByDateRange(
+      startDate: startDate,
+      endDate: endDate,
+      onlyActives: onlyActives,
+    );
   }
 }

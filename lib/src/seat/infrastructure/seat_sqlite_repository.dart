@@ -23,8 +23,8 @@ class SeatSQLiteRepository implements ISeatRepository {
   }) async {
     final Database db = await _context.database;
     final String query = onlyActives
-        ? 'SELECT * FROM seats WHERE canceled = ? AND (date BETWEEN ? AND ?)'
-        : 'SELECT * FROM seats WHERE date BETWEEN ? AND ?';
+        ? 'SELECT * FROM seats WHERE canceled = ? AND (date BETWEEN ? AND ?) ORDER BY date'
+        : 'SELECT * FROM seats WHERE date BETWEEN ? AND ? ORDER BY date';
     final List<Map<String, Object?>> data = await db.rawQuery(
       query,
       [
@@ -33,7 +33,6 @@ class SeatSQLiteRepository implements ISeatRepository {
         endDate.copyWith(hour: 23, minute: 59, second: 59).toIso8601String(),
       ],
     );
-
     return data.map((map) => Seat.fromSQLite(map)).toList();
   }
 
