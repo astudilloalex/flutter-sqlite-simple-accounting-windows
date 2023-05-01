@@ -9,6 +9,13 @@ class RoleSQLiteRepository implements IRoleRepository {
   final SQLite _context;
 
   @override
+  Future<List<Role>> findAll() async {
+    final Database db = await _context.database;
+    final List<Map<String, Object?>> data = await db.query('roles');
+    return data.map((map) => Role.fromSQLite(map)).toList();
+  }
+
+  @override
   Future<Role?> findById(int id) async {
     final Database db = await _context.database;
     final List<Map<String, Object?>> data = await db.query(
