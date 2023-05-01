@@ -8,6 +8,7 @@ import 'package:simple_accounting_offline/src/accounting_period/domain/accountin
 import 'package:simple_accounting_offline/ui/pages/settings/cubit/settings_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/widgets/add_edit_period_dialog.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/widgets/period_list.dart';
+import 'package:simple_accounting_offline/ui/pages/settings/widgets/user_list.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -48,7 +49,7 @@ class SettingsPage extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           children: [
             PeriodList(),
-            Icon(Icons.reorder),
+            UserList(),
           ],
         ),
         floatingActionButton:

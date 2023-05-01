@@ -9,6 +9,7 @@ import 'package:simple_accounting_offline/src/account/application/account_servic
 import 'package:simple_accounting_offline/src/accounting_period/application/accounting_period_service.dart';
 import 'package:simple_accounting_offline/src/seat/application/seat_service.dart';
 import 'package:simple_accounting_offline/src/seat_detail/application/seat_detail_service.dart';
+import 'package:simple_accounting_offline/src/user/application/user_service.dart';
 import 'package:simple_accounting_offline/ui/pages/account/account_page.dart';
 import 'package:simple_accounting_offline/ui/pages/account/cubit/account_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/add_seat_page.dart';
@@ -69,6 +70,7 @@ class HomePage extends StatelessWidget {
         BlocProvider(
           create: (context) => SettingsCubit(
             getIt<AccountingPeriodService>(),
+            getIt<UserService>(),
           )..load(),
           child: const SettingsPage(),
         ),
