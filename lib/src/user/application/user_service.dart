@@ -40,6 +40,7 @@ class UserService {
     final Map<String, Object?> payload = {
       'userId': user.id,
       'username': user.username,
+      'roleId': user.roleId,
       'expiration':
           DateTime.now().add(const Duration(hours: 15)).toIso8601String(),
       'issuer': 'https://www.alexastudillo.com/',

@@ -64,7 +64,7 @@ class AccountSQLiteRepository implements IAccountRepository {
     final Database db = await _context.database;
     final List<Map<String, Object?>> data = await db.query(
       'accounts',
-      where: 'account_category_id = ?',
+      where: 'account_category_id = ? AND parent_id IS NOT NULL',
       whereArgs: [categoryId],
       orderBy: 'code ASC',
     );

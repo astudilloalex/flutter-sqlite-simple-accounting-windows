@@ -16,6 +16,10 @@ class SeatService {
   final ISeatDetailRepository _seatDetailRepository;
   final GetStorageService _storageService;
 
+  Future<void> changeState(int id, {required bool cancelled}) {
+    return _repository.changeState(id, cancelled: cancelled);
+  }
+
   Future<Seat> add(Seat seat) async {
     final Seat saved = await _repository.save(
       seat.copyWith(

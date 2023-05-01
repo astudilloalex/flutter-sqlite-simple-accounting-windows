@@ -45,6 +45,7 @@ class SeatDetailService {
     final List<Seat> seats = await _seatRepository.findByDateRange(
       startDate: startDate,
       endDate: endDate,
+      onlyActives: true,
     );
     final List<SeatDetail> details =
         await _repository.findAllBySeatIdsAndCategory(

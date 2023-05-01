@@ -13,9 +13,7 @@ class AddSeatDateInput extends StatelessWidget {
       margin: EdgeInsets.zero,
       elevation: 0.0,
       shape: RoundedRectangleBorder(
-        side: const BorderSide(
-          color: Colors.teal,
-        ),
+        side: const BorderSide(),
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: InkWell(
