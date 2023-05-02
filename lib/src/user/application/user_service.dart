@@ -2,14 +2,20 @@ import 'dart:convert';
 
 import 'package:bcrypt/bcrypt.dart';
 import 'package:simple_accounting_offline/app/exception.dart';
+import 'package:simple_accounting_offline/app/services/get_storage_service.dart';
 import 'package:simple_accounting_offline/app/services/sqlite.dart';
 import 'package:simple_accounting_offline/src/user/domain/i_user_repository.dart';
 import 'package:simple_accounting_offline/src/user/domain/user.dart';
 
 class UserService {
-  const UserService(this._repository);
+  const UserService(this._repository, this._storageService);
 
   final IUserRepository _repository;
+  final GetStorageService _storageService;
+
+  Future<List<User>> getAll() {
+    return _repository.findAll();
+  }
 
   Future<User> save(User user) {
     return _repository.save(
@@ -46,5 +52,41 @@ class UserService {
       'issuer': 'https://www.alexastudillo.com/',
     };
     return json.encode(payload);
+  }
+
+  Future<void> changePassword(
+    String previousPassword,
+    String newPassword,
+  ) async {
+    final User? user = await _repository.findById(
+      _storageService.currentUserId ?? 0,
+    );
+    if (user == null) throw const AccountException('user-not-found');
+    if (!BCrypt.checkpw(previousPassword, user.password)) {
+      throw const AccountException('wrong-password');
+    }
+    return _repository.changePassword(
+      user.id ?? 0,
+      BCrypt.hashpw(newPassword, BCrypt.gensalt()),
+    );
+  }
+
+  Future<void> changePasswordByAdmin(String password, int userId) {
+    return _repository.changePassword(
+      userId,
+      BCrypt.hashpw(password, BCrypt.gensalt()),
+    );
+  }
+
+  Future<void> changeState(int userId, {required bool state}) async {
+    return _repository.changeState(
+      userId,
+      active: state,
+    );
+  }
+
+  Future<bool> checkExistsUsername(String username) async {
+    final User? user = await _repository.findByUsername(username.trim());
+    return user != null;
   }
 }

@@ -14,6 +14,9 @@ import 'package:simple_accounting_offline/src/account_type/infrastructure/accoun
 import 'package:simple_accounting_offline/src/accounting_period/application/accounting_period_service.dart';
 import 'package:simple_accounting_offline/src/accounting_period/domain/i_accounting_period_repository.dart';
 import 'package:simple_accounting_offline/src/accounting_period/infrastructure/accounting_period_sqlite_repository.dart';
+import 'package:simple_accounting_offline/src/role/application/role_service.dart';
+import 'package:simple_accounting_offline/src/role/domain/i_role_repository.dart';
+import 'package:simple_accounting_offline/src/role/infrastructure/role_sqlite_repository.dart';
 import 'package:simple_accounting_offline/src/seat/application/seat_service.dart';
 import 'package:simple_accounting_offline/src/seat/domain/i_seat_repository.dart';
 import 'package:simple_accounting_offline/src/seat/infrastructure/seat_sqlite_repository.dart';
@@ -43,6 +46,9 @@ void setUpGetIt() {
   );
   getIt.registerLazySingleton<IAccountingPeriodRepository>(
     () => AccountingPeriodSQLiteRepository(getIt<SQLite>()),
+  );
+  getIt.registerLazySingleton<IRoleRepository>(
+    () => RoleSQLiteRepository(getIt<SQLite>()),
   );
   getIt.registerLazySingleton<ISeatRepository>(
     () => SeatSQLiteRepository(getIt<SQLite>()),
@@ -78,6 +84,9 @@ void setUpGetIt() {
       getIt<GetStorageService>(),
     ),
   );
+  getIt.registerFactory<RoleService>(
+    () => RoleService(getIt<IRoleRepository>()),
+  );
   getIt.registerFactory<SeatService>(
     () => SeatService(
       getIt<ISeatRepository>(),
@@ -92,6 +101,9 @@ void setUpGetIt() {
     ),
   );
   getIt.registerFactory<UserService>(
-    () => UserService(getIt<IUserRepository>()),
+    () => UserService(
+      getIt<IUserRepository>(),
+      getIt<GetStorageService>(),
+    ),
   );
 }

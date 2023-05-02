@@ -5,9 +5,12 @@ import 'package:simple_accounting_offline/app/app.dart';
 import 'package:simple_accounting_offline/app/services/get_it_service.dart';
 import 'package:simple_accounting_offline/app/services/get_storage_service.dart';
 import 'package:simple_accounting_offline/src/accounting_period/domain/accounting_period.dart';
+import 'package:simple_accounting_offline/src/user/domain/user.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/cubit/settings_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/widgets/add_edit_period_dialog.dart';
+import 'package:simple_accounting_offline/ui/pages/settings/widgets/add_edit_user_dialog.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/widgets/period_list.dart';
+import 'package:simple_accounting_offline/ui/pages/settings/widgets/user_list.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -48,30 +51,48 @@ class SettingsPage extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           children: [
             PeriodList(),
-            Icon(Icons.reorder),
+            UserList(),
           ],
         ),
-        floatingActionButton:
-            context.watch<SettingsCubit>().state.currentTab != 0
-                ? null
-                : FloatingActionButton.extended(
-                    onPressed: () => _onAddButton(context),
-                    label: Text(AppLocalizations.of(context)!.add),
-                    icon: const Icon(Icons.add),
-                  ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => _onAddButton(context),
+          label: Text(AppLocalizations.of(context)!.add),
+          icon: const Icon(Icons.add),
+        ),
       ),
     );
   }
 
   void _onAddButton(BuildContext context) {
-    showDialog<AccountingPeriod?>(
-      context: context,
-      builder: (context) => const AddEditPeriodDialog(),
-    ).then((value) async {
-      if (value == null) return;
-      final String? error =
-          await context.read<SettingsCubit>().addPeriod(value);
-      if (error != null && context.mounted) showErrorSnackbar(context, error);
-    });
+    final int currentIndex = context.read<SettingsCubit>().state.currentTab;
+    switch (currentIndex) {
+      case 0:
+        showDialog<AccountingPeriod?>(
+          context: context,
+          builder: (context) => const AddEditPeriodDialog(),
+        ).then((value) async {
+          if (value == null) return;
+          final String? error =
+              await context.read<SettingsCubit>().addPeriod(value);
+          if (error != null && context.mounted) {
+            showErrorSnackbar(context, error);
+          }
+        });
+        break;
+      case 1:
+        showDialog<User?>(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const AddEditUserDialog(),
+        ).then((value) async {
+          if (value == null) return;
+          final String? error =
+              await context.read<SettingsCubit>().addUser(value);
+          if (error != null && context.mounted) {
+            showErrorSnackbar(context, error);
+          }
+        });
+        break;
+    }
   }
 }

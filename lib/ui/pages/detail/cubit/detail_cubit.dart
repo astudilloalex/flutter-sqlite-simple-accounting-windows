@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_accounting_offline/src/seat/application/seat_service.dart';
 import 'package:simple_accounting_offline/src/seat/domain/seat.dart';
-import 'package:simple_accounting_offline/src/seat_detail/application/seat_detail_service.dart';
 import 'package:simple_accounting_offline/ui/pages/detail/cubit/detail_state.dart';
 
 class DetailCubit extends Cubit<DetailState> {
   DetailCubit(
     this._seatService,
-    this._seatDetailService,
   ) : super(
           DetailState(
             endDate: DateTime.now().copyWith(hour: 23, minute: 59, second: 59),
@@ -22,7 +20,6 @@ class DetailCubit extends Cubit<DetailState> {
         );
 
   final SeatService _seatService;
-  final SeatDetailService _seatDetailService;
 
   Future<void> load() async {
     final List<Seat> seats = [];

@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:simple_accounting_offline/app/app.dart';
 import 'package:simple_accounting_offline/app/services/get_it_service.dart';
 import 'package:simple_accounting_offline/app/services/get_storage_service.dart';
 import 'package:simple_accounting_offline/src/account/application/account_service.dart';
 import 'package:simple_accounting_offline/src/accounting_period/application/accounting_period_service.dart';
+import 'package:simple_accounting_offline/src/role/application/role_service.dart';
 import 'package:simple_accounting_offline/src/seat/application/seat_service.dart';
 import 'package:simple_accounting_offline/src/seat_detail/application/seat_detail_service.dart';
+import 'package:simple_accounting_offline/src/user/application/user_service.dart';
 import 'package:simple_accounting_offline/ui/pages/account/account_page.dart';
 import 'package:simple_accounting_offline/ui/pages/account/cubit/account_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/add_seat/add_seat_page.dart';
@@ -17,6 +20,7 @@ import 'package:simple_accounting_offline/ui/pages/dashboard/dashboard_page.dart
 import 'package:simple_accounting_offline/ui/pages/detail/cubit/detail_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/detail/detail_page.dart';
 import 'package:simple_accounting_offline/ui/pages/home/cubit/home_cubit.dart';
+import 'package:simple_accounting_offline/ui/pages/home/widgets/change_password_dialog.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/cubit/settings_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/settings/settings_page.dart';
 import 'package:simple_accounting_offline/ui/routes/route_name.dart';
@@ -28,10 +32,10 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Available widgets for rail.
     final List<Widget> widgets = <Widget>[
-      if (context.read<HomeCubit>().roleId == 1)
+      if (context.read<HomeCubit>().roleId == 1 ||
+          context.read<HomeCubit>().roleId == 2)
         BlocProvider(
           create: (context) => DashboardCubit(
-            getIt<SeatService>(),
             getIt<SeatDetailService>(),
           )..load(),
           child: const DashboardPage(),
@@ -41,7 +45,6 @@ class HomePage extends StatelessWidget {
         BlocProvider(
           create: (context) => DetailCubit(
             getIt<SeatService>(),
-            getIt<SeatDetailService>(),
           )..load(),
           child: const DetailPage(),
         ),
@@ -67,6 +70,8 @@ class HomePage extends StatelessWidget {
         BlocProvider(
           create: (context) => SettingsCubit(
             getIt<AccountingPeriodService>(),
+            getIt<RoleService>(),
+            getIt<UserService>(),
           )..load(),
           child: const SettingsPage(),
         ),
@@ -89,23 +94,43 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        title: ElevatedButton.icon(
-          onPressed: () {
-            context.read<HomeCubit>().changeCurrentIndex(2);
-          },
-          label: Text(AppLocalizations.of(context)!.addMovement),
-          icon: const Icon(Icons.add_outlined),
-        ),
+        title: context.read<HomeCubit>().roleId == 1 ||
+                context.read<HomeCubit>().roleId == 3
+            ? ElevatedButton.icon(
+                onPressed: () {
+                  int index = 0;
+                  if (context.read<HomeCubit>().roleId == 1) {
+                    index = 2;
+                  } else {
+                    index = 0;
+                  }
+                  context.read<HomeCubit>().changeCurrentIndex(index);
+                },
+                label: Text(AppLocalizations.of(context)!.addMovement),
+                icon: const Icon(Icons.add_outlined),
+              )
+            : null,
         actions: [
           PopupMenuButton<int>(
             onSelected: (value) {
-              context.read<HomeCubit>().logout();
-              context.goNamed(RouteName.signIn);
+              switch (value) {
+                case 0:
+                  _changePassword(context);
+                  break;
+                default:
+                  context.read<HomeCubit>().logout();
+                  context.goNamed(RouteName.signIn);
+                  break;
+              }
             },
             itemBuilder: (context) {
               return [
                 PopupMenuItem<int>(
                   value: 0,
+                  child: Text(AppLocalizations.of(context)!.changePassword),
+                ),
+                PopupMenuItem<int>(
+                  value: 1,
                   child: Text(AppLocalizations.of(context)!.logout),
                 ),
               ];
@@ -177,5 +202,18 @@ class HomePage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _changePassword(BuildContext context) async {
+    showDialog<List<String>?>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const ChangePasswordDialog(),
+    ).then((value) async {
+      if (value == null) return;
+      final String? error =
+          await context.read<HomeCubit>().changePassword(value);
+      if (error != null && context.mounted) showErrorSnackbar(context, error);
+    });
   }
 }

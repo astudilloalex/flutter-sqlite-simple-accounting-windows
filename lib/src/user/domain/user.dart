@@ -1,3 +1,5 @@
+import 'package:simple_accounting_offline/src/role/domain/role.dart';
+
 class User {
   const User({
     this.active = true,
@@ -5,6 +7,7 @@ class User {
     required this.creationDate,
     this.id,
     required this.password,
+    this.role,
     required this.roleId,
     required this.updateDate,
     required this.username,
@@ -15,6 +18,7 @@ class User {
   final DateTime creationDate;
   final int? id;
   final String password;
+  final Role? role;
   final int roleId;
   final DateTime updateDate;
   final String username;
@@ -25,6 +29,7 @@ class User {
     DateTime? creationDate,
     int? id,
     String? password,
+    Role? role,
     int? roleId,
     DateTime? updateDate,
     String? username,
@@ -35,6 +40,7 @@ class User {
       creationDate: creationDate ?? this.creationDate,
       id: id ?? this.id,
       password: password ?? this.password,
+      role: role ?? this.role,
       roleId: roleId ?? this.roleId,
       updateDate: updateDate ?? this.updateDate,
       username: username ?? this.username,
@@ -56,12 +62,12 @@ class User {
 
   Map<String, Object?> toJson() {
     return {
-      'active': active,
+      'active': active ? 1 : 0,
       'code': code,
-      'creation_date': creationDate,
+      'creation_date': creationDate.toIso8601String(),
       'password': password,
       'role_id': roleId,
-      'update_date': updateDate,
+      'update_date': updateDate.toIso8601String(),
       'username': username,
     };
   }

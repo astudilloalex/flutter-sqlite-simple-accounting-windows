@@ -1,9 +1,8 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:bcrypt/bcrypt.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider_windows/path_provider_windows.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -13,9 +12,10 @@ class SQLite {
   static Database? _database;
 
   Future<Database> get database async {
-    final Directory app = await getApplicationDocumentsDirectory();
+    final String? path =
+        await PathProviderWindows().getApplicationDocumentsPath();
     return _database ??= await databaseFactoryFfi.openDatabase(
-      join(app.path, 'SimpleAccounting', 'Data', 'simpleaccounting.db'),
+      join(path ?? '', 'SimpleAccounting', 'Data', 'simpleaccounting.db'),
       options: OpenDatabaseOptions(
         version: 1,
         onCreate: _onCreate,

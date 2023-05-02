@@ -8,7 +8,6 @@ class AppThemeData {
   }
 
   static ThemeData get light {
-    const Color primary = Color(0xFFFFFFF0);
     return ThemeData.light().copyWith(
       useMaterial3: true,
       visualDensity: VisualDensity.adaptivePlatformDensity,
