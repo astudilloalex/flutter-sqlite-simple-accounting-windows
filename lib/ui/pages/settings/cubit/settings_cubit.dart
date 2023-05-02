@@ -79,9 +79,9 @@ class SettingsCubit extends Cubit<SettingsState> {
     return null;
   }
 
-  Future<String?> changeUserState({required bool active}) async {
+  Future<String?> changeUserState(int userId, {required bool active}) async {
     try {
-      await _userService.changeState(state: active);
+      await _userService.changeState(userId, state: active);
     } catch (e) {
       return e.toString();
     }
@@ -98,6 +98,18 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   Future<String?> addUser(User user) async {
+    final List<User> users = state.users;
+    try {
+      final bool exists = await _userService.checkExistsUsername(user.username);
+      if (exists) {
+        return 'username-already-exists';
+      }
+      final User saved = await _userService.save(user);
+      users.add(saved.copyWith(role: await _roleService.getById(user.roleId)));
+      emit(state.copyWith(users: users));
+    } catch (e) {
+      return e.toString();
+    }
     return null;
   }
 }

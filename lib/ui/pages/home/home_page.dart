@@ -32,10 +32,10 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Available widgets for rail.
     final List<Widget> widgets = <Widget>[
-      if (context.read<HomeCubit>().roleId == 1)
+      if (context.read<HomeCubit>().roleId == 1 ||
+          context.read<HomeCubit>().roleId == 2)
         BlocProvider(
           create: (context) => DashboardCubit(
-            getIt<SeatService>(),
             getIt<SeatDetailService>(),
           )..load(),
           child: const DashboardPage(),
@@ -45,7 +45,6 @@ class HomePage extends StatelessWidget {
         BlocProvider(
           create: (context) => DetailCubit(
             getIt<SeatService>(),
-            getIt<SeatDetailService>(),
           )..load(),
           child: const DetailPage(),
         ),
@@ -95,13 +94,22 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        title: ElevatedButton.icon(
-          onPressed: () {
-            context.read<HomeCubit>().changeCurrentIndex(2);
-          },
-          label: Text(AppLocalizations.of(context)!.addMovement),
-          icon: const Icon(Icons.add_outlined),
-        ),
+        title: context.read<HomeCubit>().roleId == 1 ||
+                context.read<HomeCubit>().roleId == 3
+            ? ElevatedButton.icon(
+                onPressed: () {
+                  int index = 0;
+                  if (context.read<HomeCubit>().roleId == 1) {
+                    index = 2;
+                  } else {
+                    index = 0;
+                  }
+                  context.read<HomeCubit>().changeCurrentIndex(index);
+                },
+                label: Text(AppLocalizations.of(context)!.addMovement),
+                icon: const Icon(Icons.add_outlined),
+              )
+            : null,
         actions: [
           PopupMenuButton<int>(
             onSelected: (value) {

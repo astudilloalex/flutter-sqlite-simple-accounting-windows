@@ -10,6 +10,10 @@ class RoleService {
     return _repository.findAll();
   }
 
+  Future<Role?> getById(int id) {
+    return _repository.findById(id);
+  }
+
   Future<List<Role>> getByIds(List<int> ids) {
     return _repository.findByIds(ids);
   }

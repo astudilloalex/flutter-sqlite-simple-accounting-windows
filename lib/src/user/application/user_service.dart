@@ -78,10 +78,15 @@ class UserService {
     );
   }
 
-  Future<void> changeState({required bool state}) async {
+  Future<void> changeState(int userId, {required bool state}) async {
     return _repository.changeState(
-      _storageService.currentUserId ?? 0,
+      userId,
       active: state,
     );
+  }
+
+  Future<bool> checkExistsUsername(String username) async {
+    final User? user = await _repository.findByUsername(username.trim());
+    return user != null;
   }
 }

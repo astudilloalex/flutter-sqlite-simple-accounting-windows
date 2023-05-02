@@ -2,19 +2,14 @@ import 'package:collection/collection.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:simple_accounting_offline/src/seat/application/seat_service.dart';
-import 'package:simple_accounting_offline/src/seat/domain/seat.dart';
 import 'package:simple_accounting_offline/src/seat_detail/application/seat_detail_service.dart';
-import 'package:simple_accounting_offline/src/seat_detail/domain/seat_detail.dart';
 import 'package:simple_accounting_offline/ui/pages/dashboard/cubit/dashboard_state.dart';
 
 class DashboardCubit extends Cubit<DashboardState> {
   DashboardCubit(
-    this._seatService,
     this._seatDetailService,
   ) : super(const DashboardState());
 
-  final SeatService _seatService;
   final SeatDetailService _seatDetailService;
 
   Future<void> load() async {

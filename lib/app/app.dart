@@ -20,6 +20,7 @@ String messageFromCode(String code, BuildContext context) {
         localizations.alreadyExistsPeriodInTheYear,
     'select-a-period': localizations.selectAPeriod,
     'user-not-found': localizations.userNotFound,
+    'username-already-exists': localizations.usernameAlreadyExists,
     'wrong-password': localizations.wrongPassword,
   };
   return errorMessages[code] ?? code;

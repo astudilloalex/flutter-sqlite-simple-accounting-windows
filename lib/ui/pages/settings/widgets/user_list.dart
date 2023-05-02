@@ -100,7 +100,9 @@ class _ChangeUserStateSwitchState extends State<_ChangeUserStateSwitch> {
       activeColor: Colors.teal,
       value: active,
       onChanged: (value) async {
-        await context.read<SettingsCubit>().changeUserState(active: value);
+        await context
+            .read<SettingsCubit>()
+            .changeUserState(widget.user.id ?? 0, active: value);
         setState(() => active = value);
       },
     );

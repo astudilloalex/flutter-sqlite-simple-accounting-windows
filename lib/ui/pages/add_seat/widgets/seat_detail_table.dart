@@ -166,7 +166,8 @@ class SeatDetailTable extends StatelessWidget {
                                   context: context,
                                   builder: (_) {
                                     return AddSeatDetailDialog(
-                                        seatDetail: detail);
+                                      seatDetail: detail,
+                                    );
                                   },
                                   barrierDismissible: false,
                                 ).then((value) {

@@ -79,6 +79,7 @@
     "total": "Total",
     "userCannotBeModified": "Este usuario no se puede modificar",
     "username": "Nombre de usuario",
+    "usernameAlreadyExists": "El nombre de usuario ya existe",
     "userNotFound": "Usuario no encontrado",
     "users": "Usuarios",
     "welcomeBack": "Bienvenido de nuevo",

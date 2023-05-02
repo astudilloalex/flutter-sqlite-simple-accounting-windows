@@ -62,12 +62,12 @@ class User {
 
   Map<String, Object?> toJson() {
     return {
-      'active': active,
+      'active': active ? 1 : 0,
       'code': code,
-      'creation_date': creationDate,
+      'creation_date': creationDate.toIso8601String(),
       'password': password,
       'role_id': roleId,
-      'update_date': updateDate,
+      'update_date': updateDate.toIso8601String(),
       'username': username,
     };
   }
