@@ -20,6 +20,48 @@ class DashboardCubit extends Cubit<DashboardState> {
     final DateTime startDate = Jiffy().subtract(months: 5).dateTime.copyWith(
           day: 1,
         );
+    emit(
+      state.copyWith(
+        sixMonthsIncomes: await _getIncomes(startDate, endDate),
+        sixMonthsExpenses: await _getExpenses(startDate, endDate),
+      ),
+    );
+  }
+
+  Future<List<Decimal>> _getExpenses(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    final List<Map<int, Decimal>> incomes =
+        await _seatDetailService.getExpenses(
+      startDate: startDate,
+      endDate: endDate,
+    );
+    final List<Decimal> data = [];
+    int monthNumber = startDate.month - 1;
+    for (int i = 0; i < 6; i++) {
+      monthNumber += 1;
+      if (monthNumber > 12) {
+        monthNumber = 1;
+      }
+      final Map<int, Decimal>? month = incomes.firstWhereOrNull(
+        (element) {
+          return element.containsKey(monthNumber);
+        },
+      );
+      if (month == null) {
+        data.add(Decimal.zero);
+      } else {
+        data.add(month.values.first);
+      }
+    }
+    return data;
+  }
+
+  Future<List<Decimal>> _getIncomes(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
     final List<Map<int, Decimal>> incomes = await _seatDetailService.getIncomes(
       startDate: startDate,
       endDate: endDate,
@@ -42,6 +84,6 @@ class DashboardCubit extends Cubit<DashboardState> {
         data.add(month.values.first);
       }
     }
-    emit(state.copyWith(sixMonthsIncomes: data));
+    return data;
   }
 }

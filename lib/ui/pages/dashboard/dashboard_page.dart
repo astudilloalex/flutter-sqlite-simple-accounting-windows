@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simple_accounting_offline/ui/pages/dashboard/widgets/incomes_chart.dart';
+import 'package:simple_accounting_offline/ui/pages/dashboard/widgets/statement_income_chart.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -14,7 +14,11 @@ class DashboardPage extends StatelessWidget {
             children: [
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 600.0),
-                child: const IncomesChart(),
+                child: const StatementIncomeChart(),
+              ),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600.0),
+                child: const StatementIncomeChart(isIncomeChart: false),
               ),
             ],
           ),

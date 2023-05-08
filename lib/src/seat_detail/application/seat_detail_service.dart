@@ -42,6 +42,44 @@ class SeatDetailService {
     return _repository.findBySeatId(seatId);
   }
 
+  Future<List<Map<int, Decimal>>> getExpenses({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    final List<Seat> seats = await _seatRepository.findByDateRange(
+      startDate: startDate,
+      endDate: endDate,
+      onlyActives: true,
+    );
+    final List<SeatDetail> details =
+        await _repository.findAllBySeatIdsAndCategory(
+      seats.map((e) => e.id ?? 0).toList(),
+      5,
+    );
+    for (int i = 0; i < seats.length; i++) {
+      seats[i] = seats[i].copyWith(
+        seatDetails:
+            details.where((element) => element.seatId == seats[i].id).toList(),
+      );
+    }
+    final List<Map<int, Decimal>> data = [];
+    final Map<int, List<Seat>> grouped = groupBy(
+      seats.where((element) => element.seatDetails.isNotEmpty),
+      (seat) => seat.date.month,
+    );
+    for (final List<Seat> elements in grouped.values) {
+      Decimal total = Decimal.zero;
+      for (final Seat seat in elements) {
+        for (final SeatDetail detail in seat.seatDetails) {
+          total += Decimal.parse(detail.debit.toString());
+          total -= Decimal.parse(detail.credit.toString());
+        }
+      }
+      data.add({elements.first.date.month: total});
+    }
+    return data;
+  }
+
   Future<List<Map<int, Decimal>>> getIncomes({
     required DateTime startDate,
     required DateTime endDate,

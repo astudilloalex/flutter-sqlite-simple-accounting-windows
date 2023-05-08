@@ -9,22 +9,28 @@ import 'package:simple_accounting_offline/app/app.dart';
 import 'package:simple_accounting_offline/ui/pages/dashboard/cubit/dashboard_cubit.dart';
 import 'package:simple_accounting_offline/ui/pages/dashboard/cubit/dashboard_state.dart';
 
-class IncomesChart extends StatelessWidget {
-  const IncomesChart({super.key});
+class StatementIncomeChart extends StatelessWidget {
+  const StatementIncomeChart({super.key, this.isIncomeChart = true});
+
+  final bool isIncomeChart;
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 16 / 12,
       child: Card(
-        color: const Color(0xFF272953),
+        color: isIncomeChart
+            ? const Color(0xFF272953)
+            : const Color.fromARGB(255, 117, 68, 119),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                AppLocalizations.of(context)!.incomes,
+                isIncomeChart
+                    ? AppLocalizations.of(context)!.incomes
+                    : AppLocalizations.of(context)!.expenses,
                 style: const TextStyle(
                   fontSize: 24,
                   color: Colors.white,
@@ -32,8 +38,8 @@ class IncomesChart extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20.0),
-              const Expanded(
-                child: _BarChart(),
+              Expanded(
+                child: _BarChart(isIncomeChart: isIncomeChart),
               ),
             ],
           ),
@@ -44,29 +50,48 @@ class IncomesChart extends StatelessWidget {
 }
 
 class _BarChart extends StatelessWidget {
-  const _BarChart();
+  const _BarChart({this.isIncomeChart = true});
+
+  final bool isIncomeChart;
 
   @override
   Widget build(BuildContext context) {
     final DashboardState state = context.watch<DashboardCubit>().state;
     return BarChart(
       BarChartData(
-        barGroups: state.sixMonthsIncomes.mapIndexed((e, index) {
-          return BarChartGroupData(
-            x: e,
-            barRods: [
-              BarChartRodData(
-                toY: index.toDouble(),
-                width: 25.0,
-                color: Colors.white,
-                backDrawRodData: BackgroundBarChartRodData(
-                  show: true,
-                  color: Colors.white.darken().withOpacity(0.3),
-                ),
-              ),
-            ],
-          );
-        }).toList(),
+        barGroups: isIncomeChart
+            ? state.sixMonthsIncomes.mapIndexed((e, index) {
+                return BarChartGroupData(
+                  x: e,
+                  barRods: [
+                    BarChartRodData(
+                      toY: index.toDouble(),
+                      width: 25.0,
+                      color: Colors.white,
+                      backDrawRodData: BackgroundBarChartRodData(
+                        show: true,
+                        color: Colors.white.darken().withOpacity(0.3),
+                      ),
+                    ),
+                  ],
+                );
+              }).toList()
+            : state.sixMonthsExpenses.mapIndexed((e, index) {
+                return BarChartGroupData(
+                  x: e,
+                  barRods: [
+                    BarChartRodData(
+                      toY: index.toDouble(),
+                      width: 25.0,
+                      color: Colors.white,
+                      backDrawRodData: BackgroundBarChartRodData(
+                        show: true,
+                        color: Colors.white.darken().withOpacity(0.3),
+                      ),
+                    ),
+                  ],
+                );
+              }).toList(),
         borderData: FlBorderData(
           show: false,
         ),
